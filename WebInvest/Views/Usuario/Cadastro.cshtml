@@ -2,3 +2,51 @@
 @{
     ViewData["Title"] = "Cadastro";
 }
+<div class="row d-flex justify-content-center align-items-center">
+    <div class="container">
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @TempData["Message"].ToString()
+            </div>
+        }
+        <div class="row">
+            <div class="col-4">
+                <label for="lblSaldo" class="text-body">Saldo</label>
+                @Html.TextBoxFor(model => model.Saldo, new { @type = "text", @class = "form-control", @id = "txtSaldo", @value = $"R$ {@Model.Saldo}", @readonly = true })
+            </div>
+            <div class="col-8">
+                <label for="lblEmail" class="text-body">Email</label>
+                @Html.TextBoxFor(model => model.Email, new { @type = "email", @class = "form-control", @id = "txtSobrenome", @value = @Model.Email, @readonly = true })
+            </div>
+        </div>
+        <p></p>
+        <div class="row">
+            <div class="col-4">
+                <label for="lblNome" class="text-body">Nome</label>
+                @Html.TextBoxFor(model => model.Nome, new { @type = "text", @class = "form-control", @id = "txtNome", @placeholder = "Nome", @readonly = true })
+            </div>
+            <div class="col-5">
+                <label for="lblSobrenome" class="text-body">Sobrenome</label>
+                @Html.TextBoxFor(model => model.Sobrenome, new { @type = "text", @class = "form-control", @id = "txtSobrenome", @value = @Model.Sobrenome, @readonly = true })
+            </div>
+            <div class="col-3">
+                <label for="lblDataNascimento">Data Nascimento</label>
+                @Html.TextBoxFor(model => model.DataNascimento, new { @type = "text", @class = "form-control", @id = "txtDataNascimento", @value = @Model.DataNascimento, @readonly = true })
+            </div>
+        </div>
+        <p></p>
+        <div class="row">
+            <div class="col-3">
+                <button type="submit" class="btn btn-primary" id="btnEnviar" onclick="@("window.location.href='" + @Url.Action("Cadastro", "Usuario") + "'");">Adicionar Saldo</button>
+            </div>
+            <div class="col-3">
+                <button type="submit" class="btn btn-primary" id="btnEnviar" onclick="@("window.location.href='" + @Url.Action("Cadastro", "Usuario") + "'");">Remover Saldo</button>
+            </div>
+            <div class="col-3">
+                <button type="submit" class="btn btn-primary" id="btnEnviar" onclick="@("window.location.href='" + @Url.Action("Cadastro", "Usuario") + "'");">Editar Conta</button>
+            </div>
+        </div>
+    </div>
+
+</div>
