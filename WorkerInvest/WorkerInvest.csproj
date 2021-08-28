@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>dotnet-WorkerInvest-15530552-4FC9-42C6-87A2-88566FC05F81</UserSecretsId>
+    <ApplicationIcon>online-shop.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.90" />
@@ -13,4 +14,5 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ProjectExtensions><VisualStudio><UserProperties settings_1job__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

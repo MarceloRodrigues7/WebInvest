@@ -26,20 +26,29 @@ namespace WorkerInvest
         {
             while (!stoppingToken.IsCancellationRequested)
             {
+                List<Task> task = new List<Task>();
                 var listAcoes = GetAcoes();
-                foreach (var acao in listAcoes)
+                _logger.LogInformation("Iniciando worker");
+
+                listAcoes.ForEach((acao) =>
                 {
-                    _logger.LogInformation($"Id Ação: {acao}");
-                    var valorAtual = GetValorAcao(acao);
-                    var novoValor = VariacaoValor(valorAtual);
-                    var dataAtual = DateTime.Now;
-                    _logger.LogInformation($"Atualizando informações");
-                    PostHistorico(acao, novoValor, dataAtual);
-                    AtualizaAcao(acao, novoValor, dataAtual);
-                    _logger.LogInformation($"Concluido com sucesso");
-                    await Task.Delay(1000, stoppingToken);
-                }
-                await Task.Delay(300000, stoppingToken);
+                    task.Add(Task.Factory.StartNew(() =>
+                    {
+                        _logger.LogInformation($"Id Ação: {acao}");
+                        var valorAtual = GetValorAcao(acao);
+                        var novoValor = VariacaoValor(valorAtual);
+                        var dataAtual = DateTime.Now;
+                        _logger.LogInformation($"Atualizando informações");
+                        PostHistorico(acao, novoValor, dataAtual);
+                        AtualizaAcao(acao, novoValor, dataAtual);
+                        _logger.LogInformation($"Concluido com sucesso");
+                    }));
+                });
+                Task.WaitAll(task.ToArray());
+                task.Clear();
+                listAcoes.Clear();
+                _logger.LogInformation("Worker finalizado");
+                await Task.Delay(180000, stoppingToken);
             }
         }
 
@@ -65,7 +74,7 @@ namespace WorkerInvest
         {
             var rand = new Random();
             var variacao = decimal.Parse(rand.NextDouble().ToString());
-            if (rand.Next(-2, 2) <= 0)
+            if (rand.Next(-1, 2) <= 0)
             {
                 return valor - variacao;
             }
