@@ -8,6 +8,6 @@ namespace WinInvest
 {
     public class Services
     {
-        public static readonly string ConnectionString = "server=svaz.database.windows.net;database=dbAzure;user=adm;password=P@ssword;Connection Timeout=1200";
+        public static readonly string ConnectionString = "Data Source=azsv.database.windows.net;Initial Catalog=azWebInvest;User ID=adm;Password=P@ssword;Connect Timeout=1000;";
     }
 }

@@ -48,6 +48,7 @@ namespace WinInvest.Acoes
 
         private void CarregaGridView()
         {
+            GridView.DataSource = null;
             GridView.DataSource = repository.GetAcoes();
             FormataGrid();
         }
@@ -55,14 +56,21 @@ namespace WinInvest.Acoes
         private void FrmAcoes_Load(object sender, EventArgs e)
         {
             CarregaGridView();
+            cbSigla.DataSource = repository.GetAcoesSiglas();
+            cbNome.DataSource = repository.GetAcoesNomes();
         }
 
         private void GridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             var Cod = GridView.SelectedCells[0].Value.ToString();
-            FrmNegociacao frm = new FrmNegociacao(Cod,Usuario);
+            FrmNegociacao frm = new FrmNegociacao(Cod, Usuario);
             frm.ShowDialog();
             Usuario.Saldo = new Usuario().AtualizaSaldo(Usuario.Id);
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            CarregaGridView();
         }
     }
 }

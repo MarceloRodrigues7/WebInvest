@@ -29,6 +29,7 @@ namespace WinInvest.Investimento
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmInvestimento));
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.btnLimpar = new System.Windows.Forms.Button();
@@ -54,7 +55,7 @@ namespace WinInvest.Investimento
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(619, 57);
+            this.panel1.Size = new System.Drawing.Size(491, 57);
             this.panel1.TabIndex = 1;
             // 
             // btnBuscar
@@ -65,6 +66,7 @@ namespace WinInvest.Investimento
             this.btnBuscar.TabIndex = 7;
             this.btnBuscar.Text = "Buscar";
             this.btnBuscar.UseVisualStyleBackColor = true;
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
             // 
             // btnLimpar
             // 
@@ -116,16 +118,17 @@ namespace WinInvest.Investimento
             this.GridView.Location = new System.Drawing.Point(0, 57);
             this.GridView.Name = "GridView";
             this.GridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.GridView.Size = new System.Drawing.Size(619, 229);
+            this.GridView.Size = new System.Drawing.Size(491, 229);
             this.GridView.TabIndex = 2;
             // 
             // FrmInvestimento
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(619, 286);
+            this.ClientSize = new System.Drawing.Size(491, 286);
             this.Controls.Add(this.GridView);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmInvestimento";
             this.Text = "Investimentos";
             this.Load += new System.EventHandler(this.FrmInvestimento_Load);

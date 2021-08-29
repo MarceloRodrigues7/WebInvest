@@ -11,7 +11,7 @@ namespace ConsoleInvest
 {
     class Program
     {
-        private static readonly string _connectionString = "server=svaz.database.windows.net;database=dbAzure;user=adm;password=P@ssword;Connection Timeout=1200";
+        private static readonly string _connectionString = "Data Source=azsv.database.windows.net;Initial Catalog=azWebInvest;User ID=adm;Password=P@ssword;Connect Timeout=1000;";
         public static void Main()
         {
             Console.Title = "Worker Invest - version 1.0.0";
@@ -81,7 +81,7 @@ namespace ConsoleInvest
                     return res;
                 };
             }
-            catch (Exception e )
+            catch (Exception e)
             {
                 Log.Error("Erro ao consultar valor acao. " + e.Message);
                 return new decimal();
@@ -91,8 +91,18 @@ namespace ConsoleInvest
         private static decimal VariacaoValor(decimal valor)
         {
             var rand = new Random();
-            var variacao = decimal.Parse(rand.NextDouble().ToString());
-            if (rand.Next(-1, 2) <= 0)
+            var interio = rand.Next(0, 1);
+            var decimo = rand.Next(0, 99);
+            decimal variacao = decimal.Parse($"{interio}.{decimo}");
+            if (valor < 0)
+            {
+                if (rand.Next(0, 3) <= 0)
+                {   
+                    return valor - variacao;
+                }
+                return valor + variacao;
+            }
+            if (rand.Next(0, 2) <= 0)
             {
                 return valor - variacao;
             }
@@ -101,24 +111,38 @@ namespace ConsoleInvest
 
         private static void PostHistorico(long id, decimal valor, DateTime dataHora)
         {
-            var query = "INSERT INTO HistoricoPrecoAcoes(IdAcao,Valor,DataHora)VALUES(@id,@valor,@dataHora)";
-            using (var connection = new SqlConnection(_connectionString))
+            try
             {
-                connection.Open();
-                connection.Execute(query, new { id, valor, dataHora });
-                connection.Close();
-            };
+                var query = "INSERT INTO HistoricoPrecoAcoes(IdAcao,Valor,DataHora)VALUES(@id,@valor,@dataHora)";
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    connection.Execute(query, new { id, valor, dataHora });
+                    connection.Close();
+                };
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Erro ao postar historico acao.id {id}. " + e.Message);
+            }
         }
 
         private static void AtualizaAcao(long id, decimal valor, DateTime dataAtualizacao)
         {
-            var query = "UPDATE Acoes SET valorAtual=@valor, dataAtualizacao=@dataAtualizacao WHERE Id=@id";
-            using (var connection = new SqlConnection(_connectionString))
+            try
             {
-                connection.Open();
-                connection.Execute(query, new { valor, dataAtualizacao, id });
-                connection.Close();
-            };
+                var query = "UPDATE Acoes SET valorAtual=@valor, dataAtualizacao=@dataAtualizacao WHERE Id=@id";
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    connection.Execute(query, new { valor, dataAtualizacao, id });
+                    connection.Close();
+                };
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Erro ao atualizar acao.id {id}. " + e.Message);
+            }
         }
     }
 }

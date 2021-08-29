@@ -18,7 +18,6 @@ namespace WebInvest.Controllers
     public class UsuarioController : Controller
     {
         private readonly string _connectionString;
-        private static int Id;
 
         public UsuarioController(IConfiguration configuration)
         {
@@ -55,11 +54,10 @@ namespace WebInvest.Controllers
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
-                    var DataNascimento = usuario.DataNascimento.ToString("yyyy-MM-dd");
                     connection.Open();
                     var query = @"INSERT INTO Usuarios(Username,Password,Email,Nome,Sobrenome,DataNascimento,Saldo,DataAlteracao)
                               VALUES(@Username,@Password,@Email,@Nome,@Sobrenome,@DataNascimento,1000,getdate())";
-                    var data = connection.Execute(query, new { usuario.Username, usuario.Password, usuario.Email, usuario.Nome, usuario.Sobrenome, DataNascimento });
+                    var data = connection.Execute(query, new { usuario.Username, usuario.Password, usuario.Email, usuario.Nome, usuario.Sobrenome, usuario.DataNascimento });
                     connection.Close();
                     return View("Login");
                 };
@@ -67,7 +65,7 @@ namespace WebInvest.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                TempData["Message"] = "Ocorreu algum erro, tente novamente!";
+                TempData["Message"] = "Ocorreu algum erro, tente novamente! " + ex.Message;
                 return View("Cadastrar");
             }
             
@@ -80,7 +78,7 @@ namespace WebInvest.Controllers
             {
                 connection.Open();
                 var query = "SELECT * FROM Usuarios WHERE Id=@Id";
-                var data = connection.QueryFirst<Usuario>(query, new { Id });
+                var data = connection.QueryFirst<Usuario>(query, new { Id = User.Identity.Name });
                 connection.Close();
                 return View(data);
             };
@@ -100,7 +98,7 @@ namespace WebInvest.Controllers
                         connection.Close();
                         if (res > 0)
                         {
-                            Id = res;
+                            usuario.Id = res;
                             GeraIdentity(usuario);
                             return RedirectToAction("Cadastro");
                         }
@@ -120,7 +118,7 @@ namespace WebInvest.Controllers
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, usuario.Username.ToString()),
+                new Claim(ClaimTypes.Name, usuario.Id.ToString()),
                 new Claim(ClaimTypes.Role, "Usuario_Comum")
             };
             var identidadeDeUsuario = new ClaimsIdentity(claims, "Login");

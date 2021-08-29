@@ -5,14 +5,18 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinInvest.Models;
+using WinInvest.Repositorys;
 
 namespace WinInvest
 {
     public partial class FrmPainel : Form
     {
+        private IAcaoRepository acaoRepository = new AcaoRepository();
+        private IUsuarioRepository usuarioRepository = new UsuarioRepository();
         private Usuario Usuario { get; set; }
 
         public FrmPainel(Usuario usuario)
@@ -24,7 +28,7 @@ namespace WinInvest
 
         private void FrmPainel_Load(object sender, EventArgs e)
         {
-            
+            AtualizaToolStrip();
         }
 
         #region Eventos para abrir formularios
@@ -75,10 +79,30 @@ namespace WinInvest
                 MessageBox.Show("Formulario já está aberto.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            Transferencia.FrmTransferencia frm = new Transferencia.FrmTransferencia();
+            Transferencia.FrmTransferencia frm = new Transferencia.FrmTransferencia(Usuario);
             frm.MdiParent = this;
             frm.Show();
         }
         #endregion
+
+        private void FrmPainel_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void AtualizaToolStrip()
+        {
+                Usuario = usuarioRepository.GetUsuario(Usuario.Username, Usuario.Password);
+                var tAcoes = acaoRepository.GetAcoesSiglas().Count();
+                toolStripUsuario.Text = $"Usuário: {Usuario.Nome}";
+                toolStripSaldo.Text = $"Saldo: R$ {Usuario.Saldo}";
+                toolStripAcoes.Text = $"Ações em Sistema: {tAcoes}";
+                toolStripUltAtualizacao.Text = $"Ult. Atualização: {DateTime.Now}";
+        }
+
+        private void FrmPainel_MouseEnter(object sender, EventArgs e)
+        {
+            AtualizaToolStrip();
+        }
     }
 }

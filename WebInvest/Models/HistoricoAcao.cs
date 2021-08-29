@@ -7,6 +7,10 @@ namespace WebInvest.Models
 {
     public class HistoricoAcao
     {
+        public long Id { get; set; }
+        public string Sigla { get; set; }
+        public string Nome { get; set; }
+        public decimal ValorAtual { get; set; }
         public DateTime DataHora { get; set; }
         public decimal Valor { get; set; }        
     }

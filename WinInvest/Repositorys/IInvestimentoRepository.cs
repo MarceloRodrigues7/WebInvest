@@ -5,6 +5,7 @@ namespace WinInvest.Repositorys
 {
     public interface IInvestimentoRepository
     {
-        IEnumerable<OrdemInvestimento> GetInvestimentos(int IdUsuario);
+        IEnumerable<OrdemInvestimento> GetTransferencias(int IdUsuario);
+        IEnumerable<InvestimentoUsuario> GetInvestimentos(int IdUsuario);
     }
 }

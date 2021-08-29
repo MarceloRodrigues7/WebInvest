@@ -15,7 +15,7 @@ namespace WinInvest.Conta
     public partial class FrmConta : Form
     {
         private Usuario Usuario { get; set; }
-        
+
         public FrmConta(Usuario usuario)
         {
             InitializeComponent();
@@ -33,6 +33,7 @@ namespace WinInvest.Conta
             txtDataNascimento.Text = Usuario.DataNascimento.ToString();
             txtDataAlteração.Text = Usuario.DataAlteracao.ToString();
             txtAtivo.Text = Usuario.StatusAtivo.ToString();
+            Usuario.Saldo = new Usuario().AtualizaSaldo(Usuario.Id);
             txtSaldo.Text = $"R$ {Usuario.Saldo}";
         }
 

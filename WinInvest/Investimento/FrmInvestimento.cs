@@ -14,7 +14,8 @@ namespace WinInvest.Investimento
 {
     public partial class FrmInvestimento : Form
     {
-        private IInvestimentoRepository repository = new InvestimentoRepository();
+        private readonly IInvestimentoRepository repository = new InvestimentoRepository();
+        private readonly IAcaoRepository acaoRepository = new AcaoRepository();
         private Usuario Usuario { get; set; }
 
         public FrmInvestimento(Usuario usuario)
@@ -33,24 +34,23 @@ namespace WinInvest.Investimento
             GridView.ReadOnly = true;
             GridView.RowsDefaultCellStyle.BackColor = Color.LightCyan;
             GridView.AlternatingRowsDefaultCellStyle.BackColor = Color.LightBlue;
-            GridView.Columns[0].HeaderText = "Sigla";
+            GridView.Columns[0].HeaderText = "Cod.";
             GridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            GridView.Columns[1].HeaderText = "Qtd.";
+            GridView.Columns[1].HeaderText = "Sigla";
             GridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            GridView.Columns[2].HeaderText = "Preço Un.";
+            GridView.Columns[2].HeaderText = "Qtd";
             GridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            GridView.Columns[3].HeaderText = "Preço T.";
+            GridView.Columns[3].HeaderText = "Valor Atual";
             GridView.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            GridView.Columns[4].HeaderText = "D. Realização";
+            GridView.Columns[4].HeaderText = "D. Atualização";
             GridView.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            GridView.Columns[5].HeaderText = "Status";
-            GridView.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            GridView.Columns[6].HeaderText = "Tipo";
-            GridView.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            GridView.Columns[5].HeaderText = "Ao Vender";
+            GridView.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
         private void CarregaGridView()
         {
+            GridView.DataSource = null;
             GridView.DataSource = repository.GetInvestimentos(Usuario.Id);
             FormataGrid();
         }
@@ -58,8 +58,12 @@ namespace WinInvest.Investimento
         private void FrmInvestimento_Load(object sender, EventArgs e)
         {
             CarregaGridView();
+            cbSigla.DataSource = acaoRepository.GetAcoesSiglas();
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            CarregaGridView();
         }
     }
-
-
 }

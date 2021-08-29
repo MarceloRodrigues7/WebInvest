@@ -44,7 +44,7 @@
             </div>
             <div class="col">
                 <label for="dtDataNascimento">Data Nascimento</label>
-                @Html.TextBoxFor(model => model.DataNascimento, new { @type = "Date", @class = "form-control", @id = "dtDataNascimento", @min = "2015", @required = true })
+                @Html.TextBoxFor(model => model.DataNascimento, new { @type = "Date", @class = "form-control", @id = "dtDataNascimento", @min = "1/1/1753", @required = true })
                 <div class="invalid-feedback">Selecione uma data.</div>
             </div>
         </div>

@@ -29,16 +29,17 @@ namespace WinInvest.Acoes
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAcoes));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.GridView = new System.Windows.Forms.DataGridView();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtCod = new System.Windows.Forms.TextBox();
-            this.cbSigla = new System.Windows.Forms.ComboBox();
-            this.cbNome = new System.Windows.Forms.ComboBox();
-            this.btnLimpar = new System.Windows.Forms.Button();
             this.btnBuscar = new System.Windows.Forms.Button();
+            this.btnLimpar = new System.Windows.Forms.Button();
+            this.cbNome = new System.Windows.Forms.ComboBox();
+            this.cbSigla = new System.Windows.Forms.ComboBox();
+            this.txtCod = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.GridView = new System.Windows.Forms.DataGridView();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridView)).BeginInit();
             this.SuspendLayout();
@@ -61,6 +62,75 @@ namespace WinInvest.Acoes
             this.panel1.Size = new System.Drawing.Size(621, 57);
             this.panel1.TabIndex = 0;
             // 
+            // btnBuscar
+            // 
+            this.btnBuscar.Location = new System.Drawing.Point(534, 22);
+            this.btnBuscar.Name = "btnBuscar";
+            this.btnBuscar.Size = new System.Drawing.Size(75, 23);
+            this.btnBuscar.TabIndex = 7;
+            this.btnBuscar.Text = "Buscar";
+            this.btnBuscar.UseVisualStyleBackColor = true;
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
+            // 
+            // btnLimpar
+            // 
+            this.btnLimpar.Location = new System.Drawing.Point(453, 22);
+            this.btnLimpar.Name = "btnLimpar";
+            this.btnLimpar.Size = new System.Drawing.Size(75, 23);
+            this.btnLimpar.TabIndex = 6;
+            this.btnLimpar.Text = "Limpar";
+            this.btnLimpar.UseVisualStyleBackColor = true;
+            // 
+            // cbNome
+            // 
+            this.cbNome.FormattingEnabled = true;
+            this.cbNome.Location = new System.Drawing.Point(185, 24);
+            this.cbNome.Name = "cbNome";
+            this.cbNome.Size = new System.Drawing.Size(262, 21);
+            this.cbNome.TabIndex = 5;
+            // 
+            // cbSigla
+            // 
+            this.cbSigla.FormattingEnabled = true;
+            this.cbSigla.Location = new System.Drawing.Point(87, 24);
+            this.cbSigla.Name = "cbSigla";
+            this.cbSigla.Size = new System.Drawing.Size(92, 21);
+            this.cbSigla.TabIndex = 4;
+            // 
+            // txtCod
+            // 
+            this.txtCod.Location = new System.Drawing.Point(14, 24);
+            this.txtCod.Name = "txtCod";
+            this.txtCod.Size = new System.Drawing.Size(67, 20);
+            this.txtCod.TabIndex = 3;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(182, 8);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(35, 13);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Nome";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(84, 8);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(30, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Sigla";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(11, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Cod.";
+            // 
             // GridView
             // 
             this.GridView.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
@@ -73,74 +143,6 @@ namespace WinInvest.Acoes
             this.GridView.TabIndex = 1;
             this.GridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridView_CellDoubleClick);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 8);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Cod.";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(84, 8);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(30, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Sigla";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(182, 8);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Nome";
-            // 
-            // txtCod
-            // 
-            this.txtCod.Location = new System.Drawing.Point(14, 24);
-            this.txtCod.Name = "txtCod";
-            this.txtCod.Size = new System.Drawing.Size(67, 20);
-            this.txtCod.TabIndex = 3;
-            // 
-            // cbSigla
-            // 
-            this.cbSigla.FormattingEnabled = true;
-            this.cbSigla.Location = new System.Drawing.Point(87, 24);
-            this.cbSigla.Name = "cbSigla";
-            this.cbSigla.Size = new System.Drawing.Size(92, 21);
-            this.cbSigla.TabIndex = 4;
-            // 
-            // cbNome
-            // 
-            this.cbNome.FormattingEnabled = true;
-            this.cbNome.Location = new System.Drawing.Point(185, 24);
-            this.cbNome.Name = "cbNome";
-            this.cbNome.Size = new System.Drawing.Size(262, 21);
-            this.cbNome.TabIndex = 5;
-            // 
-            // btnLimpar
-            // 
-            this.btnLimpar.Location = new System.Drawing.Point(453, 22);
-            this.btnLimpar.Name = "btnLimpar";
-            this.btnLimpar.Size = new System.Drawing.Size(75, 23);
-            this.btnLimpar.TabIndex = 6;
-            this.btnLimpar.Text = "Limpar";
-            this.btnLimpar.UseVisualStyleBackColor = true;
-            // 
-            // btnBuscar
-            // 
-            this.btnBuscar.Location = new System.Drawing.Point(534, 22);
-            this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.Size = new System.Drawing.Size(75, 23);
-            this.btnBuscar.TabIndex = 7;
-            this.btnBuscar.Text = "Buscar";
-            this.btnBuscar.UseVisualStyleBackColor = true;
-            // 
             // FrmAcoes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -148,6 +150,7 @@ namespace WinInvest.Acoes
             this.ClientSize = new System.Drawing.Size(621, 450);
             this.Controls.Add(this.GridView);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmAcoes";
             this.Text = "Ações";
             this.Load += new System.EventHandler(this.FrmAcoes_Load);

@@ -14,8 +14,8 @@ namespace WinInvest.Acoes
 {
     public partial class FrmNegociacao : Form
     {
-        private IAcaoRepository AcaoRepository = new AcaoRepository();
-        private IOrdemRepository OrdemRepository = new OrdemRepository();
+        private readonly IAcaoRepository AcaoRepository = new AcaoRepository();
+        private readonly IOrdemRepository OrdemRepository = new OrdemRepository();
         private Usuario Usuario { get; set; }
         private BaseAcao Acao { get; set; }
 
@@ -32,8 +32,10 @@ namespace WinInvest.Acoes
             txtSigla.Text = Acao.Sigla;
             txtPreco.Text = $"R$ {Acao.ValorAtual}";
             txtNome.Text = Acao.Acao;
-            txtDataCriacao.Text = Acao.DataCriacao.ToString();
+            txtDataCriacao.Text = Acao.DataCriacao.ToString("dd/MM/yyyy");
             txtDataAtualizacao.Text = Acao.DataAtualizacao.ToString();
+            txtValorTotal.Text = $"R$ {Acao.ValorAtual}";
+
         }
 
         private void btnComprar_Click(object sender, EventArgs e)
@@ -42,7 +44,12 @@ namespace WinInvest.Acoes
             if (res)
             {
                 Usuario.Saldo -= Acao.ValorAtual * txtQuantidade.Value;
+                MessageBox.Show($"Compra de {Acao.Sigla} realizada!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+                return;
             }
+            MessageBox.Show("Não foi possível realizar transferencia", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            this.Close();
         }
 
         private void btnVender_Click(object sender, EventArgs e)
@@ -51,8 +58,12 @@ namespace WinInvest.Acoes
             if (res)
             {
                 Usuario.Saldo += Acao.ValorAtual * txtQuantidade.Value;
+                MessageBox.Show($"Venda de {Acao.Sigla} realizada!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+                return;
             }
-
+            MessageBox.Show("Não foi possível realizar transferencia", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            this.Close();
         }
 
         private void txtQuantidade_ValueChanged(object sender, EventArgs e)

@@ -11,5 +11,7 @@ namespace WinInvest.Repositorys
     {
         IEnumerable<BaseAcao> GetAcoes();
         BaseAcao GetAcao(string cod);
+        IEnumerable<string> GetAcoesSiglas();
+        IEnumerable<string> GetAcoesNomes();
     }
 }
