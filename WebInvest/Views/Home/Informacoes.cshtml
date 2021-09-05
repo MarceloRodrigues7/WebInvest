@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = "Informações";
+}
+
+<div class="container-fluid">
+
+    <div class="card shadow">
+
+        <div class="card-body">
+            <section class="highlight-phone">
+                <div class="container">
+                    <div class="row justify-content-center mb-3">
+                        <div class="text-center">
+                            <div class="text-secondary">
+                                <h3>Compre, Venda e Aumente seu Saldo.&nbsp;</h3>
+                                <p>Realize simulações de compra e venda de ações, onde a cada transação alteração seu saldo atualmente.</p>
+                                <a class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("Cadastrar", "Usuario") + "'");">Seguir</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="text-center">
+                            <img class="img-responsive" width="200" height="150" src="~/png-clipart-100-us-dollar-banknotes-united-states-dollar-money-banknote-flying-dollars-saving-image-file-formats.png">
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <br />
+        <div class="card-body">
+            <section class="features">
+                <div class="container">
+                    <div class="text-secondary">
+                        <h3 class="text-center">Funcionalidades</h3>
+                    </div>
+                    <br />
+                    <div class="row justify-content-center">
+                        <div class="card col-sm-3 ml-1 mr-1 mb-2" style="width: 18rem;">
+                            <div class="card-body text-center">
+                                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="exchange-alt" role="img" xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 512 512" class="svg-inline--fa fa-exchange-alt fa-w-16 fa-lg">
+                                    <path fill="currentColor" d="M0 168v-16c0-13.255 10.745-24 24-24h360V80c0-21.367 25.899-32.042 40.971-16.971l80 80c9.372 9.373 9.372 24.569 0 33.941l-80 80C409.956 271.982 384 261.456 384 240v-48H24c-13.255 0-24-10.745-24-24zm488 152H128v-48c0-21.314-25.862-32.08-40.971-16.971l-80 80c-9.372 9.373-9.372 24.569 0 33.941l80 80C102.057 463.997 128 453.437 128 432v-48h360c13.255 0 24-10.745 24-24v-16c0-13.255-10.745-24-24-24z" class=""></path>
+                                </svg>
+                                <p>
+                                    <h5>Compra e Venda Instantânea</h5>
+                                    <label class="text-left">Ao definir qual ação compra/vender.</label>
+                                    <label class="text-left">Executando a transação, é validado saldo e realizado movimentações em sistema.</label>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="card col-sm-3 ml-1 mr-1 mb-2" style="width: 18rem;">
+                            <div class="card-body text-center">
+                                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sync" role="img" xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 512 512" class="svg-inline--fa fa-sync fa-w-16 fa-spin fa-lg">
+                                    <path fill="currentColor" d="M440.65 12.57l4 82.77A247.16 247.16 0 0 0 255.83 8C134.73 8 33.91 94.92 12.29 209.82A12 12 0 0 0 24.09 224h49.05a12 12 0 0 0 11.67-9.26 175.91 175.91 0 0 1 317-56.94l-101.46-4.86a12 12 0 0 0-12.57 12v47.41a12 12 0 0 0 12 12H500a12 12 0 0 0 12-12V12a12 12 0 0 0-12-12h-47.37a12 12 0 0 0-11.98 12.57zM255.83 432a175.61 175.61 0 0 1-146-77.8l101.8 4.87a12 12 0 0 0 12.57-12v-47.4a12 12 0 0 0-12-12H12a12 12 0 0 0-12 12V500a12 12 0 0 0 12 12h47.35a12 12 0 0 0 12-12.6l-4.15-82.57A247.17 247.17 0 0 0 255.83 504c121.11 0 221.93-86.92 243.55-201.82a12 12 0 0 0-11.8-14.18h-49.05a12 12 0 0 0-11.67 9.26A175.86 175.86 0 0 1 255.83 432z" class=""></path>
+                                </svg>
+                                <p>
+                                    <h5>Atualiza ações a cada 3 minutos.</h5>
+                                    <label class="text-left">Realizado via Back-End.</label>
+                                    <label class="text-left">A cada 3 minutos todas as ações são listadas e tem seu valor atualizado.</label>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="card col-sm-3 ml-1 mr-1 mb-2" style="width: 18rem;">
+                            <div class="card-body text-center">
+                                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="server" role="img" xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 512 512" class="svg-inline--fa fa-server fa-w-16 fa-lg">
+                                    <path fill="currentColor" d="M480 160H32c-17.673 0-32-14.327-32-32V64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm112 248H32c-17.673 0-32-14.327-32-32v-64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm112 248H32c-17.673 0-32-14.327-32-32v-64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24z" class=""></path>
+                                </svg>
+                                <p>
+                                    <h5 class="text-center">Sistema em Desenvolvimento</h5>
+                                    <label class="text-left">Projeto Open-Source em versão Beta (beta-1.0.1.5)</label>
+                                    <label class="text-left">Acesso Github: <a href="github.com.br">Github.com/WebInvest</a> </label>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <a class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("Cadastrar", "Usuario") + "'");">Seguir</a>
+                    </div>
+                    <br />
+
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+
+
+
+

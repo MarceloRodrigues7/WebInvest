@@ -3,53 +3,82 @@
     ViewData["Title"] = "Transações";
 }
 
-<div class="row d-flex h-100">
-    <div class="container">
-        <h3 class="text-left pl-5">
-            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-file-bar-graph-fill" viewBox="0 0 16 16">
-                <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm-2 11.5v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-2.5.5a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm-3 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1z"></path>
-            </svg>
-            Transações realizadas
-        </h3>
-    </div>
-</div>
-<span class="ui-icon ui-icon-arrowthick-1-n"></span>
-<br />
-<div class="row d-flex justify-content-center align-items-center h-100">
-    <div class="col-lg-2 col-lg-3 col-lg-11 col-lg-5 col-lg-8 col-sm-5">
-        <table class="table table-striped table-bordered table-hover" id="myTable">
-            <thead>
-                <tr>
-                    <th scope="col">Sigla</th>
-                    <th scope="col">Quantidade</th>
-                    <th scope="col">Valor Un.</th>
-                    <th scope="col">Valor Total</th>
-                    <th scope="col">Data Realização</th>
-                    <th scope="col">Status Ordem</th>
-                    <th scope="col">Tipo</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+<div class="container-fluid">
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 font-weight-bold">
+                <h4>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" fill="currentColor" class="bi bi-file-bar-graph-fill" viewBox="0 0 16 16">
+                        <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm-2 11.5v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-2.5.5a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm-3 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1z"></path>
+                    </svg>
+                    Transações realizadas
+                </h4>
+            </p>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-bordered table-hover" id="myTable">
+                <thead>
                     <tr>
-                        <td>@item.Sigla</td>
-                        <td>@item.Quantidade</td>
-                        <td>R$@item.ValorUn</td>
-                        <td>R$@item.ValorTotal</td>
-                        <td>@item.DataHora</td>
-                        <td>@item.StatusOrdem</td>
-                        <td>@item.Tipo</td>
+                        <th class="text-center" scope="col">Sigla</th>
+                        <th class="text-center" scope="col">Qtd.</th>
+                        <th class="text-center" scope="col">Valor Un.</th>
+                        <th class="text-center" scope="col">Valor Total</th>
+                        <th class="text-center" scope="col">Data Realização</th>
+                        <th class="text-center" scope="col">Status</th>
+                        <th class="text-center" scope="col">Tipo</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-center">@item.Sigla</td>
+                            <td class="text-center">@item.Quantidade</td>
+                            <td class="text-center">R$ @item.ValorUn</td>
+                            <td class="text-center">R$ @item.ValorTotal</td>
+                            <td class="text-center">@item.DataHora</td>
+                            @if (@item.StatusOrdem == "Sucesso")
+                            {
+                                <td class="text-center">
+                                    <i class="fas fa-thumbs-up" style="color:seagreen" title="Sucesso"></i>
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="text-center">@item.StatusOrdem</td>
+                            }
+
+                            @if (@item.Tipo == "Venda")
+                            {
+                                <td class="text-center">
+                                    <i class="fas fa-cart-plus" style="color:indianred" title="Venda"></i>
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="text-center">
+                                    <i class="fas fa-cart-plus" style="color:seagreen" title="Compra"></i>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
-<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-
+<script src="//code.jquery.com/jquery-3.5.1.js"></script>
+<script src="//cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/1.11.1/js/dataTables.bootstrap4.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="//cdn.datatables.net/buttons/2.0.0/js/dataTables.buttons.min.js"></script>
+<script src="//cdn.datatables.net/buttons/2.0.0/js/buttons.bootstrap4.min.js"></script>
+<script src="//cdn.datatables.net/buttons/2.0.0/js/buttons.html5.min.js"></script>
+<script src="//cdn.datatables.net/buttons/2.0.0/js/buttons.print.min.js"></script>
+<script src="//cdn.datatables.net/buttons/2.0.0/js/buttons.colVis.min.js"></script>
 <script>
     $(document).ready(function () {
         $.noConflict();
@@ -60,7 +89,10 @@
                 "info": "Mostrando página _PAGE_ de _PAGES_",
                 "infoEmpty": "Nenhum registro disponível",
                 "infoFiltered": "(filtrado de _MAX_ registros no total)"
-            }
+            },
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
         });
-    });
-</script>
+    });</script>

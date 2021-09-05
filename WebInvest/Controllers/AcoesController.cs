@@ -34,25 +34,15 @@ namespace WebInvest.Controllers
         [Authorize]
         public IActionResult Informacao(BaseAcao baseAcao)
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                var query = @"SELECT Acoes.Id,Acoes.sigla,Acoes.acao AS 'Nome',Acoes.ValorAtual,HistoricoPrecoAcoes.DataHora,HistoricoPrecoAcoes.Valor FROM HistoricoPrecoAcoes 
-                              LEFT JOIN Acoes ON(HistoricoPrecoAcoes.IdAcao= Acoes.Id) WHERE IdAcao=@Id and DataHora>=getdate()-30 order by DataHora asc";
-                var data = connection.Query<HistoricoAcao>(query, new { baseAcao.Id });
-                return View(data);
-            };
+            var data = GetHistoricoAcao(baseAcao);
+            return View(data);
         }
 
         [Authorize]
         public IActionResult Historico(BaseAcao baseAcao)
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                var query = @"SELECT Acoes.Id,Acoes.sigla,Acoes.acao AS 'Nome',Acoes.ValorAtual,HistoricoPrecoAcoes.DataHora,HistoricoPrecoAcoes.Valor FROM HistoricoPrecoAcoes 
-                              LEFT JOIN Acoes ON(HistoricoPrecoAcoes.IdAcao= Acoes.Id) WHERE IdAcao=@Id and DataHora>=getdate()-30 order by DataHora asc";
-                var data = connection.Query<HistoricoAcao>(query, new { baseAcao.Id });
-                return View(data);
-            };
+            var data = GetHistoricoAcao(baseAcao);
+            return View(data);
         }
 
         [Authorize]
@@ -74,6 +64,10 @@ namespace WebInvest.Controllers
         [Authorize]
         public IActionResult Comprar(Transferencia transferencia)
         {
+            if (transferencia._BaseAcao.ValorAtual < 0)
+            {
+                transferencia._BaseAcao.ValorAtual = transferencia._BaseAcao.ValorAtual * -1;
+            }
             var saldo = GetSaldoUsuario();
             var valorTotal = transferencia.Quantidade * transferencia._BaseAcao.ValorAtual;
             try
@@ -123,7 +117,7 @@ namespace WebInvest.Controllers
                     }
                 }
                 TempData["Message"] = "Quantidade insuficiente para realizar venda!";
-                return View("Negociar",transferencia);
+                return View("Negociar", transferencia);
             }
             catch (Exception ex)
             {
@@ -223,5 +217,14 @@ namespace WebInvest.Controllers
             };
         }
 
+        private IEnumerable<HistoricoAcao> GetHistoricoAcao(BaseAcao baseAcao)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = @"SELECT Acoes.Id,Acoes.sigla,Acoes.acao AS 'Nome',Acoes.ValorAtual,HistoricoPrecoAcoes.DataHora,HistoricoPrecoAcoes.Valor FROM HistoricoPrecoAcoes 
+                              LEFT JOIN Acoes ON(HistoricoPrecoAcoes.IdAcao= Acoes.Id) WHERE IdAcao=@Id and DataHora>=getdate()-30 order by DataHora asc";
+                return connection.Query<HistoricoAcao>(query, new { baseAcao.Id });
+            };
+        }
     }
 }

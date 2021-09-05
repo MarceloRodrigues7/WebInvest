@@ -3,60 +3,77 @@
     ViewData["Title"] = "Ações";
 }
 
-<div class="row d-flex h-100">
-    <div class="container">
-        <h3 class="text-left pl-5">
-            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-file-bar-graph-fill" viewBox="0 0 16 16">
-                <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm-2 11.5v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-2.5.5a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm-3 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1z"></path>
-            </svg>
-            Ações disponíveis
-        </h3>
-    </div>
-</div>
-<br />
-<div class="row d-flex justify-content-center align-items-center h-100">
-    <div class="col-lg-2 col-lg-3 col-lg-11 col-lg-5 col-lg-8 col-sm-5">
-        <table class="table table-striped table-bordered table-hover" id="myTable">
-            <thead>
-                <tr>
-                    <th scope="col">Cod</th>
-                    <th scope="col">Sigla</th>
-                    <th scope="col">Ação</th>
-                    <th scope="col">Valor</th>
-                    <th scope="col">Última Atualização</th>
-                    <th scope="col">Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+<div class="container-fluid">
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-secondary m-0 font-weight-bold">
+                <h4>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" fill="currentColor" class="bi bi-file-bar-graph-fill" viewBox="0 0 16 16">
+                        <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm-2 11.5v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-2.5.5a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm-3 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1z"></path>
+                    </svg>
+                    Ações disponíveis
+                </h4>
+            </p>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-bordered table-hover" id="myTable">
+                <thead>
                     <tr>
-                        <td>@item.Id</td>
-                        <td>@item.Sigla</td>
-                        <td>@item.Acao</td>
-                        <td class="text-sm-center">R$ @item.ValorAtual</td>
-                        <td class="text-sm-center">@item.DataAtualizacao</td>
-                        <td class="text-sm-center">
-                            <button type="button" class="btn btn-outline-success btn-sm" title="Negociar" onclick="@("window.location.href='" + @Url.Action("Negociar", "Acoes",item) + "'");">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-plus-fill" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zM8.5 8a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V12a.5.5 0 0 0 1 0v-1.5H10a.5.5 0 0 0 0-1H8.5V8z"></path>
-                                </svg>
-                            </button>
-                            <button type="button" class="btn btn-outline-info btn-sm" title="Informações" onclick="@("window.location.href='" + @Url.Action("Informacao", "Acoes",item) + "'");">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5z"></path>
-                                </svg>
-                            </button>
-                        </td>
+                        <th class="text-center" scope="col">Cod</th>
+                        <th class="text-center" scope="col">Sigla</th>
+                        <th class="text-center" scope="col">Ação</th>
+                        <th class="text-center" scope="col">Valor</th>
+                        <th class="text-center" scope="col">Última Atualização</th>
+                        <th class="text-center" scope="col">Ação</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-center">@item.Id</td>
+                            <td class="text-center">@item.Sigla</td>
+                            <td>@item.Acao</td>
+                            @if (@item.ValorAtual < 0)
+                            {
+                                <td class="text-center" style="color:indianred">R$ @item.ValorAtual</td>
+                            }
+                            else
+                            {
+                                <td class="text-center" style="color:seagreen">R$ @item.ValorAtual</td>
+                            }
+                            <td class="text-center">@item.DataAtualizacao</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-outline-success btn-sm" title="Negociar" onclick="@("window.location.href='" + @Url.Action("Negociar", "Acoes",item) + "'");">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-plus-fill" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zM8.5 8a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V12a.5.5 0 0 0 1 0v-1.5H10a.5.5 0 0 0 0-1H8.5V8z"></path>
+                                    </svg>
+                                </button>
+                                <button type="button" class="btn btn-outline-info btn-sm" title="Informações" onclick="@("window.location.href='" + @Url.Action("Informacao", "Acoes",item) + "'");">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5z"></path>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 
+<script src="//code.jquery.com/jquery-3.5.1.js"></script>
+<script src="//cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/1.11.1/js/dataTables.bootstrap4.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="//cdn.datatables.net/buttons/2.0.0/js/dataTables.buttons.min.js"></script>
+<script src="//cdn.datatables.net/buttons/2.0.0/js/buttons.bootstrap4.min.js"></script>
+<script src="//cdn.datatables.net/buttons/2.0.0/js/buttons.html5.min.js"></script>
+<script src="//cdn.datatables.net/buttons/2.0.0/js/buttons.print.min.js"></script>
+<script src="//cdn.datatables.net/buttons/2.0.0/js/buttons.colVis.min.js"></script>
 <script>
     $(document).ready(function () {
         $.noConflict();
@@ -67,6 +84,10 @@
                 "info": "Mostrando página _PAGE_ de _PAGES_",
                 "infoEmpty": "Nenhum registro disponível",
                 "infoFiltered": "(filtrado de _MAX_ registros no total)"
-            }
+            },
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
         });
     });</script>
