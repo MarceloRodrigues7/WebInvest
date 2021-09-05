@@ -99,7 +99,7 @@ namespace ConsoleInvest.Jobs
             var interio = rand.Next(0, 1);
             var priDecimo = rand.Next(0, 9);
             var segDecimo = rand.Next(1, 9);
-            decimal variacao = decimal.Parse($"{interio}.{priDecimo}{segDecimo}");
+            decimal variacao = decimal.Parse($"{interio},{priDecimo}{segDecimo}");
             return variacao;
         }
 

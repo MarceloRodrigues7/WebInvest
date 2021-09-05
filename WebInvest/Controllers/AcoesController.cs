@@ -44,6 +44,18 @@ namespace WebInvest.Controllers
         }
 
         [Authorize]
+        public IActionResult Historico(BaseAcao baseAcao)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = @"SELECT Acoes.Id,Acoes.sigla,Acoes.acao AS 'Nome',Acoes.ValorAtual,HistoricoPrecoAcoes.DataHora,HistoricoPrecoAcoes.Valor FROM HistoricoPrecoAcoes 
+                              LEFT JOIN Acoes ON(HistoricoPrecoAcoes.IdAcao= Acoes.Id) WHERE IdAcao=@Id and DataHora>=getdate()-30 order by DataHora asc";
+                var data = connection.Query<HistoricoAcao>(query, new { baseAcao.Id });
+                return View(data);
+            };
+        }
+
+        [Authorize]
         public IActionResult Negociar(BaseAcao baseAcao)
         {
             using (var connection = new SqlConnection(_connectionString))

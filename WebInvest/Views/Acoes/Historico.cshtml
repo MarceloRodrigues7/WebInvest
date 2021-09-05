@@ -2,8 +2,6 @@
 @{
     ViewData["Title"] = "Informações";
     var bAcao = new BaseAcao { Id = @Model.First().Id };
-    var diasSerializado = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(m => m.DataHora).ToList()));
-    var valoresSerializado = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(m => m.Valor).ToList()));
 }
 
 <div class="row d-flex h-100">
@@ -15,7 +13,7 @@
                 <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"></path>
                 <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"></path>
             </svg>
-            Gráfico
+            Historico
         </h3>
     </div>
 </div>
@@ -39,50 +37,50 @@
                 <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zM8.5 8a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V12a.5.5 0 0 0 1 0v-1.5H10a.5.5 0 0 0 0-1H8.5V8z"></path>
             </svg>
         </button>
-        <button type="button" class="btn btn-outline-info" title="Historico" onclick="@("window.location.href='" + @Url.Action("Historico", "Acoes",bAcao) + "'");">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
-                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"></path>
+        <button type="button" class="btn btn-outline-info" title="Gráfico" onclick="@("window.location.href='" + @Url.Action("Informacao", "Acoes",bAcao) + "'");">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-line-fill" viewBox="0 0 16 16">
+                <path d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1V2z"></path>
             </svg>
         </button>
     </div>
 </div>
 <br />
 <div class="row d-flex justify-content-center align-items-center h-100">
-    <div class="col-8">
-        <canvas id="grafico" width="400" height="150"></canvas>
+    <div class="col-2 col-3 col-11">
+        <table class="table table-striped table-bordered table-hover" id="myTable">
+            <thead>
+                <tr>
+                    <th class="text-center">Sigla</th>
+                    <th class="text-center">Periodo</th>
+                    <th class="text-center">Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center">@item.Sigla</td>
+                        <td class="text-center">@item.DataHora</td>
+                        <td class="text-center">R$ @item.Valor</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 <script>
-    var dias = @diasSerializado;
-    var valores = @valoresSerializado;
-    const data = {
-        labels: dias,
-        datasets: [{
-            label: '@Model.First().Sigla',
-            data: valores,
-            fill: false,
-            borderColor: 'rgb(75, 192, 192)'
-        }]
-    };
-    const config = {
-        type: 'line',
-        data: data,
-        options: {
-            devicePixelRatio: 1,
-            scales: {
-                xAxes: [{
-                    ticks: {
-                        display: false
-                    }
-                }]
+    $(document).ready(function () {
+        $.noConflict();
+        var table = $('#myTable').DataTable({
+            "language": {
+                "lengthMenu": "Mostrando _MENU_ registros por página",
+                "zeroRecords": "Nada encontrado",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "Nenhum registro disponível",
+                "infoFiltered": "(filtrado de _MAX_ registros no total)"
             }
-        }
-    };
-    var myChart = new Chart(
-        document.getElementById('grafico'),
-        config
-    );
-
-</script>
+        });
+    });</script>
