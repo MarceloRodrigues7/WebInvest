@@ -3,58 +3,68 @@
     ViewData["Title"] = "Cadastro";
 }
 <div class="row d-flex justify-content-center align-items-center">
-    <div class="container">
-        @if (TempData["Message"] != null)
-        {
-            <div class="alert alert-danger" role="alert">
-                @TempData["Message"].ToString()
-            </div>
-        }
-    <div class="row">
-        <h3 class="text-left pl-5">
-            <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" fill="currentColor" class="bi bi-person-badge-fill" viewBox="0 0 16 16">
-                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm4.5 0a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm5 2.755C12.146 12.825 10.623 12 8 12s-4.146.826-5 1.755V14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.245z" />
-            </svg>
-            Cadastro
-        </h3>
-    </div>
-        <div class="row">
-            <div class="col-3">
-                <label for="lblSaldo" class="text-body">Saldo</label>
-                <input type="text" class="form-control" ,id="txtSaldo" value="R$ @Model.Saldo" readonly />
-            </div>
-            <div class="col-6">
-                <label for="lblEmail" class="text-body">Email</label>
-                <input type="email" class="form-control" ,id="txtEmail" value="@Model.Email" readonly />
+    <div class="card shadow border-left-primary py-2">
+        <div class="card-title">
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    @TempData["Message"].ToString()
+                </div>
+            }
+            <div class="row align-items-center no-gutters">
+                <div class="col">
+                    <div class="text-secondary font-weight-bold text-center mt-2">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-person-badge-fill" viewBox="0 0 16 16">
+                                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm4.5 0a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm5 2.755C12.146 12.825 10.623 12 8 12s-4.146.826-5 1.755V14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.245z" />
+                            </svg>
+                            Cadastro
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
-        <p></p>
-        <div class="row">
-            <div class="col-4">
-                <label for="lblNome" class="text-body">Nome</label>
-                @Html.TextBoxFor(model => model.Nome, new { @type = "text", @class = "form-control", @id = "txtNome", @placeholder = "Nome", @readonly = true })
-            </div>
-            <div class="col-5">
-                <label for="lblSobrenome" class="text-body">Sobrenome</label>
-                @Html.TextBoxFor(model => model.Sobrenome, new { @type = "text", @class = "form-control", @id = "txtSobrenome", @value = @Model.Sobrenome, @readonly = true })
-            </div>
-            <div class="col-2">
-                <label for="lblDataNascimento">Data Nascimento</label>
-                <input type="text" class="form-control",id="txtDataNascimento" value="@Model.DataNascimento.ToString("dd/MM/yyyy")" readonly />
-            </div>
-        </div>
-        <p></p>
-        <div class="row">
-            <div class="col-3">
-                <button type="submit" class="btn btn-primary" id="btnEnviar" onclick="@("window.location.href='" + @Url.Action("Cadastro", "Usuario") + "'");">Adicionar Saldo</button>
-            </div>
-            <div class="col-3">
-                <button type="submit" class="btn btn-primary" id="btnEnviar" onclick="@("window.location.href='" + @Url.Action("Cadastro", "Usuario") + "'");">Remover Saldo</button>
-            </div>
-            <div class="col-3">
-                <button type="submit" class="btn btn-primary" id="btnEnviar" onclick="@("window.location.href='" + @Url.Action("Cadastro", "Usuario") + "'");">Editar Conta</button>
-            </div>
-        </div>
-    </div>
+        <div class="card-body">
+            <div class="container">
+                <div class="row mb-2">
+                    <div class="col-4">
+                        <label for="lblNome" class="text-body">Nome</label>
+                        @Html.TextBoxFor(model => model.Nome, new { @type = "text", @class = "form-control", @id = "txtNome", @placeholder = "Nome", @readonly = true })
+                    </div>
+                    <div class="col-5">
+                        <label for="lblSobrenome" class="text-body">Sobrenome</label>
+                        @Html.TextBoxFor(model => model.Sobrenome, new { @type = "text", @class = "form-control", @id = "txtSobrenome", @value = @Model.Sobrenome, @readonly = true })
+                    </div>
+                    <div class="col-3">
+                        <label for="lblDataNascimento">Data Nascimento</label>
+                        <input type="text" class="form-control" ,id="txtDataNascimento" value="@Model.DataNascimento.ToString("dd/MM/yyyy")" readonly />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label for="lblSaldo" class="text-body">Saldo</label>
+                        <input type="text" class="form-control" ,id="txtSaldo" value="R$ @Model.Saldo" readonly />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label for="lblEmail" class="text-body">Email</label>
+                        <input type="email" class="form-control" ,id="txtEmail" value="@Model.Email" readonly />
+                    </div>
+                </div>
 
+                <div class="row justify-content-center mt-4">
+                    <div class="col-3">
+                        <button type="submit" class="btn btn-primary" id="btnEnviar" onclick="@("window.location.href='" + @Url.Action("Cadastro", "Usuario") + "'");" disabled>Adicionar Saldo</button>
+                    </div>
+                    <div class="col-3">
+                        <button type="submit" class="btn btn-primary" id="btnEnviar" onclick="@("window.location.href='" + @Url.Action("Cadastro", "Usuario") + "'");" disabled>Remover Saldo</button>
+                    </div>
+                    <div class="col-3">
+                        <button type="submit" class="btn btn-primary" id="btnEnviar" onclick="@("window.location.href='" + @Url.Action("Cadastro", "Usuario") + "'");" disabled>Editar Conta</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

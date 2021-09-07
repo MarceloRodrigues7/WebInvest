@@ -44,11 +44,15 @@
                             }
                             <td class="text-center">@item.DataAtualizacao</td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-outline-success btn-sm" title="Negociar" onclick="@("window.location.href='" + @Url.Action("Negociar", "Acoes",item) + "'");">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-plus-fill" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zM8.5 8a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V12a.5.5 0 0 0 1 0v-1.5H10a.5.5 0 0 0 0-1H8.5V8z"></path>
-                                    </svg>
-                                </button>
+
+                                @if (User.IsInRole("Usuario_Comum"))
+                                {
+                                    <button type="button" class="btn btn-outline-success btn-sm" title="Negociar" onclick="@("window.location.href='" + @Url.Action("Negociar", "Acoes",item) + "'");">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-plus-fill" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zM8.5 8a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V12a.5.5 0 0 0 1 0v-1.5H10a.5.5 0 0 0 0-1H8.5V8z"></path>
+                                        </svg>
+                                    </button>
+                                }
                                 <button type="button" class="btn btn-outline-info btn-sm" title="Informações" onclick="@("window.location.href='" + @Url.Action("Informacao", "Acoes",item) + "'");">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5z"></path>
@@ -78,6 +82,7 @@
     $(document).ready(function () {
         $.noConflict();
         var table = $('#myTable').DataTable({
+            "order": [[3, "desc"]],
             "language": {
                 "lengthMenu": "Mostrando _MENU_ registros por página",
                 "zeroRecords": "Nada encontrado",
