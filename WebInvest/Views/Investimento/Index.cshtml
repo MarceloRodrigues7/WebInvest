@@ -84,10 +84,27 @@
 <script src="//cdn.datatables.net/buttons/2.0.0/js/buttons.html5.min.js"></script>
 <script src="//cdn.datatables.net/buttons/2.0.0/js/buttons.print.min.js"></script>
 <script src="//cdn.datatables.net/buttons/2.0.0/js/buttons.colVis.min.js"></script>
+
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+<script src="//cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap.min.js"></script>
 <script>
     $(document).ready(function () {
         $.noConflict();
-        var table = $('#myTable').DataTable({
+        $('#myTable').DataTable({
+            responsive: {
+                details: {
+                    display: $.fn.dataTable.Responsive.display.modal({
+                        header: function (row) {
+                            var data = row.data();
+                            return 'Details for ' + data[0] + ' ' + data[1];
+                        }
+                    }),
+                    renderer: $.fn.dataTable.Responsive.renderer.tableAll({
+                        tableClass: 'table'
+                    })
+                }
+            },
             "language": {
                 "lengthMenu": "Mostrando _MENU_ registros por página",
                 "zeroRecords": "Nada encontrado",

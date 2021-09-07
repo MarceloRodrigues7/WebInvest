@@ -62,6 +62,22 @@ namespace WebInvest.Controllers
         }
 
         [Authorize]
+        public IActionResult Venda(string Id)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = @"SELECT * FROM Acoes WITH(NOLOCK) WHERE Id=@Id";
+                var data = connection.QueryFirst<BaseAcao>(query, new { Id });
+                var transferencia = new Transferencia
+                {
+                    _BaseAcao = data,
+                    Quantidade = 0
+                };
+                return View(transferencia);
+            };
+        }
+
+        [Authorize]
         public IActionResult Comprar(Transferencia transferencia)
         {
             if (transferencia._BaseAcao.ValorAtual < 0)

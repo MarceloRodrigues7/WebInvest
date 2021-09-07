@@ -2,57 +2,70 @@
 @{
     ViewData["Title"] = "Cadastrar";
 }
-<div class="row d-flex justify-content-center align-items-center">
-    @using (Html.BeginForm("PostUsuario", "Usuario", FormMethod.Post, new { @class = "needs-validation", @novalidate = true }))
-    {
-        @Html.ValidationSummary()
-        @Html.AntiForgeryToken()
-    <div class="container">
-        @if (TempData["Message"] != null)
-        {
-            <div class="alert alert-danger" role="alert">
-                @TempData["Message"].ToString()
-            </div>
-        }
-        <div class="row">
-            <div class="col">
-                <label for="lblNome" class="text-body">Username</label>
-                @Html.TextBoxFor(model => model.Username, new { @type = "text", @class = "form-control", @id = "txtUsername", @placeholder = "Username", @required = true })
-                <div class="invalid-feedback">Por favor, digite seu Username.</div>
-            </div>
-            <div class="col">
-                <label for="lblSobrenome" class="text-body">Password</label>
-                @Html.TextBoxFor(model => model.Password, new { @type = "password", @class = "form-control", @id = "txtPassword", @placeholder = "*****", @required = true })
-                <div class="invalid-feedback">Por favor, digite sua senha.</div>
-            </div>
-            <div class="col">
-                <label for="lblSobrenome" class="text-body">Email</label>
-                @Html.TextBoxFor(model => model.Email, new { @type = "email", @class = "form-control", @id = "txtSobrenome", @placeholder = "exemplo@seu.email", @required = true })
-                <div class="invalid-feedback">Por favor, digite seu email.</div>
+<div class="row justify-content-center">
+    <div class="card col-8">
+        <div class="card-subtitle ml-4 mt-4">
+            <div class="text-left">
+                <h5 class="text-secondary">Novo Cadastro<i class="fas fa-user-plus ml-2"></i></h5>
             </div>
         </div>
-        <p></p>
-        <div class="row">
-            <div class="col">
-                <label for="lblNome" class="text-body">Nome</label>
-                @Html.TextBoxFor(model => model.Nome, new { @type = "text", @class = "form-control", @id = "txtNome", @placeholder = "Nome", @required = true })
-                <div class="invalid-feedback">Por favor, digite seu nome.</div>
-            </div>
-            <div class="col">
-                <label for="lblSobrenome" class="text-body">Sobrenome</label>
-                @Html.TextBoxFor(model => model.Sobrenome, new { @type = "text", @class = "form-control", @id = "txtSobrenome", @placeholder = "Sobrenome", })
-            </div>
-            <div class="col">
-                <label for="dtDataNascimento">Data Nascimento</label>
-                @Html.TextBoxFor(model => model.DataNascimento, new { @type = "Date", @class = "form-control", @id = "dtDataNascimento", @min = "1/1/1753", @required = true })
-                <div class="invalid-feedback">Selecione uma data.</div>
+        <div class="card-body">
+            <div class="row">
+                    @using (Html.BeginForm("PostUsuario", "Usuario", FormMethod.Post, new { @class = "needs-validation", @novalidate = true }))
+                    {
+                        @Html.ValidationSummary()
+                        @Html.AntiForgeryToken()
+                        <div class="container">
+                            @if (TempData["Message"] != null)
+                            {
+                                <div class="alert alert-danger" role="alert">
+                                    @TempData["Message"].ToString()
+                                </div>
+                            }
+                            <div class="row">
+                                <div class="col">
+                                    <label for="lblNome" class="text-body">Username</label>
+                                    @Html.TextBoxFor(model => model.Username, new { @type = "text", @class = "form-control", @id = "txtUsername", @placeholder = "Username", @required = true })
+                                    <div class="invalid-feedback">Por favor, digite seu Username.</div>
+                                </div>
+                                <div class="col">
+                                    <label for="lblSobrenome" class="text-body">Password</label>
+                                    @Html.TextBoxFor(model => model.Password, new { @type = "password", @class = "form-control", @id = "txtPassword", @placeholder = "*****", @required = true })
+                                    <div class="invalid-feedback">Por favor, digite sua senha.</div>
+                                </div>
+                                <div class="col">
+                                    <label for="lblSobrenome" class="text-body">Email</label>
+                                    @Html.TextBoxFor(model => model.Email, new { @type = "email", @class = "form-control", @id = "txtSobrenome", @placeholder = "exemplo@seu.email", @required = true })
+                                    <div class="invalid-feedback">Por favor, digite seu email.</div>
+                                </div>
+                            </div>
+                            <p></p>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="lblNome" class="text-body">Nome</label>
+                                    @Html.TextBoxFor(model => model.Nome, new { @type = "text", @class = "form-control", @id = "txtNome", @placeholder = "Nome", @required = true })
+                                    <div class="invalid-feedback">Por favor, digite seu nome.</div>
+                                </div>
+                                <div class="col">
+                                    <label for="lblSobrenome" class="text-body">Sobrenome</label>
+                                    @Html.TextBoxFor(model => model.Sobrenome, new { @type = "text", @class = "form-control", @id = "txtSobrenome", @placeholder = "Sobrenome", })
+                                </div>
+                                <div class="col">
+                                    <label for="dtDataNascimento">Data Nascimento</label>
+                                    @Html.TextBoxFor(model => model.DataNascimento, new { @type = "Date", @class = "form-control", @id = "dtDataNascimento", @min = "1/1/1753", @required = true })
+                                    <div class="invalid-feedback">Selecione uma data.</div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center mt-3">
+                                <button type="submit" class="btn btn-primary" id="btnEnviar">Enviar</button>
+                            </div>
+                        </div>
+                    }
             </div>
         </div>
-        <p></p>
-        <button type="submit" class="btn btn-primary" id="btnEnviar">Enviar</button>
     </div>
-    }
 </div>
+
 
 <script>
     (function () {

@@ -79,15 +79,7 @@ namespace ConsoleInvest.Jobs
         {
             var rand = new Random();
             decimal variacao = GeraValor(rand);
-            if (valor < 0)
-            {
-                if (rand.Next(0, 3) <= 0)
-                {
-                    return valor - variacao;
-                }
-                return valor + variacao;
-            }
-            if (rand.Next(0, 2) <= 0)
+            if (rand.Next(-1, 3) <= 0)
             {
                 return valor - variacao;
             }

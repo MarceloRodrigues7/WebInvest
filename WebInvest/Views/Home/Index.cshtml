@@ -110,21 +110,29 @@
 }
 else
 {
-    <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">
-        <div class="card col-12 justify-content-center">
-            <div class="card-header">
-                Necessário realizar Login!
+    <div class="row justify-content-center align-items-center">
+        <div class="card col-8">
+            <div class="card-subtitle">
+                <div class="alert alert-secondary" role="alert">
+                    Necessário realizar identificação para acesso ao sistema!
+                </div>
             </div>
-            <div class="card-body">
-                <h5 class="card-title">Cadastre-se</h5>
-                <p class="card-text">Informe dados para realizar novo cadastro/login.</p>
-                <a href="#" class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("Cadastrar", "Usuario") + "'");">Seguir</a>
-            </div>
-            <br />
-            <div class="card-body">
-                <h5 class="card-title">Realizar Login</h5>
-                <p class="card-text">Informe Username e Password.</p>
-                <a href="#" class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("Login", "Usuario") + "'");">Seguir</a>
+            <div class="row justify-content-center">
+                <div class="card col-5 mb-2 mr-2 alert-secondary" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="text-info">Cadastre-se<i class="fas fa-user-plus ml-2"></i></h5>
+                        <p class="card-text">Crie sua conta e começa a utilizar o sistema hoje mesmo.</p>
+                    </div>
+                    <a href="#" class="btn btn-primary mb-2" onclick="@("window.location.href='" + @Url.Action("Cadastrar", "Usuario") + "'");">Cadastrar</a>
+                </div>
+
+                <div class="card col-5 mb-2 mr-2 alert-secondary" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="text-info">Realizar Login<i class="fas fa-sign-in-alt ml-2"></i></h5>
+                        <p class="card-text">Retorne ao seu cadastro e lucros.</p>
+                    </div>
+                    <a href="#" class="btn btn-primary mb-2" onclick="@("window.location.href='" + @Url.Action("Login", "Usuario") + "'");">Entrar</a>
+                </div>
             </div>
         </div>
     </div>
@@ -145,6 +153,7 @@ else
     $(document).ready(function () {
         $.noConflict();
         var table = $('#myTable').DataTable({
+            "order": [[1, "desc"]],
             "language": {
                 "lengthMenu": "Mostrando _MENU_ registros por página",
                 "zeroRecords": "Nada encontrado",

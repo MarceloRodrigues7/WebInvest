@@ -1,0 +1,53 @@
+﻿@model Transferencia
+@{
+    Layout = null;
+    ViewBag.Title = "Venda";
+}
+
+<div class="modal fade" id="modelVenda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @using (Html.BeginForm("Vender", "Acoes", FormMethod.Post, new { @class = "needs-validation", @novalidate = true }))
+    {
+        @Html.ValidationSummary()
+        @Html.AntiForgeryToken()
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Compra: @Model._BaseAcao.Acao</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <label class="text-break">Cod.</label>
+                            @Html.TextBoxFor(model => model._BaseAcao.Id, new { @type = "text", @class = "form-control", @id = "txtId", @required = true, @readonly = true })
+                        </div>
+                        <div class="col">
+                            <label class="text-break">Ação</label>
+                            @Html.TextBoxFor(model => model._BaseAcao.Sigla, new { @type = "text", @class = "form-control", @id = "txtSigla", @required = true, @readonly = true })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="text-break">Valor Atual</label>
+                            @Html.TextBoxFor(model => model._BaseAcao.ValorAtual, new { @type = "text", @class = "form-control", @id = "txtValorAtual", @required = true, @readonly = true })
+                        </div>
+                        <div class="col">
+                            <label class="text-break">Qtde.</label>
+                            @Html.TextBoxFor(model => model.Quantidade, new { @type = "text", @class = "form-control", @id = "txtQuantidade2", @required = true, @readonly = true })
+                        </div>
+                        <div class="col">
+                            <label class="text-break">Valor Total</label>
+                            <input type="text" class="form-control" name="ValorTotal3" disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success btn-sm">Vender</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
