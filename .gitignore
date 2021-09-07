@@ -93,8 +93,8 @@ BenchmarkDotNet.Artifacts/
 project.lock.json
 project.fragment.lock.json
 artifacts/
-appsettings.json
-
+.ConsoleInvest/Utils/Services.*
+WebInvest/appsettings.*
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
 
