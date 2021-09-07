@@ -20,7 +20,6 @@ namespace WebInvest.Controllers
             _connectionString = configuration.GetConnectionString("DataServer");
         }
 
-        [Authorize]
         public IActionResult Index()
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -31,14 +30,12 @@ namespace WebInvest.Controllers
             };
         }
 
-        [Authorize]
         public IActionResult Informacao(BaseAcao baseAcao)
         {
             var data = GetHistoricoAcao(baseAcao);
             return View(data);
         }
 
-        [Authorize]
         public IActionResult Historico(BaseAcao baseAcao)
         {
             var data = GetHistoricoAcao(baseAcao);

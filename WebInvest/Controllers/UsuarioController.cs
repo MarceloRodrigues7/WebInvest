@@ -100,7 +100,7 @@ namespace WebInvest.Controllers
                         {
                             usuario.Id = res;
                             GeraIdentity(usuario);
-                            return RedirectToAction("Cadastro");
+                            return RedirectToAction("Index","Home");
                         }
                     };
                 }
