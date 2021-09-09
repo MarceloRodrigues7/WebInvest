@@ -58,6 +58,7 @@ namespace WebInvest.Controllers
                 Vendas = ordens.Vendas,
                 Compras = ordens.Compras
             };
+            ViewBag.LevelUsuario = GetLevelUsuario(idUsuario);
             return rankSaldoAtual;
         }
 
@@ -128,6 +129,19 @@ namespace WebInvest.Controllers
                 connection.Open();
                 var query = "SELECT Username,Saldo FROM Usuarios ORDER BY Saldo DESC";
                 var data = connection.Query<RankSaldoAtual>(query);
+                connection.Close();
+                return data;
+            };
+        }
+
+        private LevelUsuario GetLevelUsuario(string IdUsuario)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = @"SELECT l.Id,l.IdUsuario,l.LevelAtual,l.ExpAtual,l.ExpProximo,c.Nome AS Categoria,l.IdCategoriaLevel FROM LevelUsuarios AS l WITH(NOLOCK) 
+                              LEFT JOIN CategoriasLevel AS c WITH(NOLOCK) ON(l.IdCategoriaLevel=c.Id) WHERE l.IdUsuario=@IdUsuario";
+                connection.Open();
+                var data = connection.QueryFirst<LevelUsuario>(query, new { IdUsuario });
                 connection.Close();
                 return data;
             };

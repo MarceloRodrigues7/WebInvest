@@ -1,10 +1,33 @@
 ﻿@model IEnumerable<RankSaldoAtual>
 @{
     var baseDashboard = ViewBag.BaseDashboard;
+    dynamic levelUsuario = string.Empty;
+    dynamic resultado = string.Empty;
+    if (User.IsInRole("Usuario_Comum"))
+    {
+        levelUsuario = ViewBag.LevelUsuario;
+        resultado = (((double)levelUsuario.ExpAtual / (double)levelUsuario.ExpProximo)*100).ToString("00")+"%";
+    }
 }
-<h1 class="text-center text-primary">WebInvest</h1>
 @if (User.IsInRole("Usuario_Comum"))
 {
+<div class="card shadow border-left-primary py-2 pl-2 pr-2 bg-secondary">
+    <h1 class="text-center text-primary">WebInvest</h1>
+    <div class="row mb-2">
+        <div class="col">
+            <div class="card shadow border-left-success">
+                <div class="card-body">
+                    <div class="row ml-2">
+                        <div class="text-uppercase text-info font-weight-bold text-xs mb-1"><span>Level: @levelUsuario.LevelAtual</span></div>
+                    </div>
+                    <div class="progress ml-2 mr-3">
+                        <div class="progress-bar" role="progressbar" style="width:@resultado" aria-valuenow="@resultado" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-6 col-xl-3 mb-4">
             <div class="card shadow border-left-success py-2">
@@ -13,13 +36,13 @@
                         <div class="col mr-2">
                             <div class="text-uppercase text-info font-weight-bold text-xs mb-1"><span>Saldo Atual</span></div>
                             @if (baseDashboard.SaldoAtual < 0)
-                            {
-                                <div class="text-danger font-weight-bold h5 mb-0"><span>$ @baseDashboard.SaldoAtual</span></div>
-                            }
-                            else
-                            {
-                                <div class="text-success font-weight-bold h5 mb-0"><span>$ @baseDashboard.SaldoAtual</span></div>
-                            }
+                                {
+                            <div class="text-danger font-weight-bold h5 mb-0"><span>$ @baseDashboard.SaldoAtual</span></div>
+                                }
+                                else
+                                {
+                            <div class="text-success font-weight-bold h5 mb-0"><span>$ @baseDashboard.SaldoAtual</span></div>
+                                }
 
                         </div>
                         <div class="col-auto"><i class="fas fa-hand-holding-usd fa-2x text-gray-300"></i></div>
@@ -35,13 +58,13 @@
                         <div class="col mr-2">
                             <div class="text-uppercase text-info font-weight-bold text-xs mb-1"><span>Saldo Investido</span></div>
                             @if (baseDashboard.SaldoInvestido < 0)
-                            {
-                                <div class="text-danger font-weight-bold h5 mb-0"><span>$ @baseDashboard.SaldoInvestido</span></div>
-                            }
-                            else
-                            {
-                                <div class="text-success font-weight-bold h5 mb-0"><span>$ @baseDashboard.SaldoInvestido</span></div>
-                            }
+                                {
+                            <div class="text-danger font-weight-bold h5 mb-0"><span>$ @baseDashboard.SaldoInvestido</span></div>
+                                }
+                                else
+                                {
+                            <div class="text-success font-weight-bold h5 mb-0"><span>$ @baseDashboard.SaldoInvestido</span></div>
+                                }
                         </div>
                         <div class="col-auto"><i class="fas fa-money-bill-wave fa-2x text-gray-300"></i></div>
                     </div>
@@ -93,24 +116,26 @@
                     </thead>
                     <tbody>
                         @foreach (var item in @Model)
-                        {
-                            <tr>
+                            {
+                        <tr>
 
-                                <td class="text-center">@item.Username</td>
-                                <td class="text-center">$ @item.Saldo</td>
+                            <td class="text-center">@item.Username</td>
+                            <td class="text-center">$ @item.Saldo</td>
 
-                            </tr>
-                        }
+                        </tr>
+                            }
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
+</div>
 }
 else
 {
-    <div class="row justify-content-center align-items-center">
+<div class="card shadow border-left-primary py-2 pl-2 pr-2 bg-secondary">
+    <h1 class="text-center text-primary">WebInvest</h1>
+    <div class="row justify-content-center align-items-center mb-3">
         <div class="card col-8">
             <div class="card-subtitle">
                 <div class="alert alert-secondary" role="alert">
@@ -136,6 +161,17 @@ else
             </div>
         </div>
     </div>
+
+    <div class="card m-0">
+        <ul class="list-group">
+            <li class="list-group-item active">Implementações Recentes</li>
+            <li class="list-group-item">
+                <h6 class="card-subtitle text-muted">Sistema de Gameficação. <span class="badge badge-secondary">Novo</span></h6>
+                <p class="card-text">A cada compra é acumulado 1 exp em sua conta. Durante o acumulo de exp, seu Level e Categoria tambem são melhorados.</p>
+            </li>
+        </ul>
+    </div>
+</div>
 }
 
 <script src="//code.jquery.com/jquery-3.5.1.js"></script>
