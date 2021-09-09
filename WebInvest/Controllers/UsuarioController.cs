@@ -68,7 +68,6 @@ namespace WebInvest.Controllers
                 TempData["Message"] = "Ocorreu algum erro, tente novamente! " + ex.Message;
                 return View("Cadastrar");
             }
-            
         }
 
         [Authorize]
@@ -80,10 +79,11 @@ namespace WebInvest.Controllers
                 var query = "SELECT * FROM Usuarios WHERE Id=@Id";
                 var data = connection.QueryFirst<Usuario>(query, new { Id = User.Identity.Name });
                 connection.Close();
+                ViewBag.LevelUsuario = GetLevel();
                 return View(data);
             };
         }
-                
+
         public IActionResult AutenticacaoUsuario(Usuario usuario)
         {
             try
@@ -100,7 +100,8 @@ namespace WebInvest.Controllers
                         {
                             usuario.Id = res;
                             GeraIdentity(usuario);
-                            return RedirectToAction("Index","Home");
+                            ValidaLevelUsuario(usuario.Id);
+                            return RedirectToAction("Index", "Home");
                         }
                     };
                 }
@@ -130,6 +131,50 @@ namespace WebInvest.Controllers
                 IsPersistent = true,
             };
             HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal, propriedadesDeAutenticacao);
+        }
+
+        private LevelUsuario GetLevel()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var query = @"SELECT l.Id,l.IdUsuario,l.LevelAtual,l.ExpAtual,l.ExpProximo,c.Nome AS Categoria,l.IdCategoriaLevel FROM LevelUsuarios AS l WITH(NOLOCK) 
+                              LEFT JOIN CategoriasLevel AS c WITH(NOLOCK) ON(l.IdCategoriaLevel=c.Id) WHERE IdUsuario=@Id";
+                var data = connection.QueryFirst<LevelUsuario>(query, new { Id = User.Identity.Name });
+                connection.Close();
+                return data;
+            };
+        }
+
+        private void ValidaLevelUsuario(int name)
+        {
+            if (!ValidaUsuarioTabelaLevel(name))
+            {
+                PostUsuarioTabelaLevel(name);
+            }
+        }
+
+        private bool ValidaUsuarioTabelaLevel(int name)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var query = "SELECT COUNT(*) FROM LevelUsuarios WHERE IdUsuario=@name";
+                var data = connection.QueryFirst<int>(query, new { name });
+                connection.Close();
+                return data > 0;
+            };
+        }
+
+        private void PostUsuarioTabelaLevel(int name)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var query = "INSERT INTO LevelUsuarios(IdUsuario) VALUES(@name)";
+                connection.Execute(query, new { name });
+                connection.Close();
+            };
         }
 
     }

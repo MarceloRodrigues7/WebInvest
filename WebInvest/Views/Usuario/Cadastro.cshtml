@@ -1,6 +1,7 @@
 ﻿@model Usuario
 @{
     ViewData["Title"] = "Cadastro";
+    var levelUsuario = ViewBag.LevelUsuario;
 }
 <div class="row d-flex justify-content-center align-items-center">
     <div class="card shadow border-left-primary py-2">
@@ -52,7 +53,20 @@
                         <input type="email" class="form-control" ,id="txtEmail" value="@Model.Email" readonly />
                     </div>
                 </div>
-
+                <div class="row mb-2">
+                    <div class="col-2">
+                        <label for="lblLevelAtual" class="text-body">Level</label>
+                        <input type="text" class="form-control" ,id="txtDataNascimento" value="@levelUsuario.LevelAtual" readonly />
+                    </div>
+                    <div class="col-3">
+                        <label for="lblClassificacao" class="text-body">Classificação</label>
+                        <input type="text" class="form-control" ,id="txtDataNascimento" value="@levelUsuario.Categoria" readonly />
+                    </div>
+                    <div class="col-7">
+                        <label for="lblExperiencia">Experiência</label>
+                        <input type="text" class="form-control" ,id="txtDataNascimento" value="@levelUsuario.ExpAtual" readonly />
+                    </div>
+                </div>
                 <div class="row justify-content-center mt-4">
                     <div class="col-3">
                         <button type="submit" class="btn btn-primary" id="btnEnviar" onclick="@("window.location.href='" + @Url.Action("Cadastro", "Usuario") + "'");" disabled>Adicionar Saldo</button>

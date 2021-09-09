@@ -59,22 +59,6 @@ namespace WebInvest.Controllers
         }
 
         [Authorize]
-        public IActionResult Venda(string Id)
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                var query = @"SELECT * FROM Acoes WITH(NOLOCK) WHERE Id=@Id";
-                var data = connection.QueryFirst<BaseAcao>(query, new { Id });
-                var transferencia = new Transferencia
-                {
-                    _BaseAcao = data,
-                    Quantidade = 0
-                };
-                return View(transferencia);
-            };
-        }
-
-        [Authorize]
         public IActionResult Comprar(Transferencia transferencia)
         {
             if (transferencia._BaseAcao.ValorAtual < 0)
@@ -97,6 +81,7 @@ namespace WebInvest.Controllers
                     var quantidadeAtual = GetQuantidadeAcao(transferencia._BaseAcao.Id, int.Parse(User.Identity.Name));
                     PutInvestimentoUsuario(transferencia._BaseAcao.Id, int.Parse(User.Identity.Name), quantidadeAtual + transferencia.Quantidade);
                     PutSaldoUsuario(int.Parse(User.Identity.Name), saldo - valorTotal);
+                    FuncGameficacao();
                     return RedirectToAction("Index", "Investimento");
                 }
                 TempData["Message"] = "Saldo insuficiente para realizar Compra!";
@@ -237,6 +222,66 @@ namespace WebInvest.Controllers
                 var query = @"SELECT Acoes.Id,Acoes.sigla,Acoes.acao AS 'Nome',Acoes.ValorAtual,HistoricoPrecoAcoes.DataHora,HistoricoPrecoAcoes.Valor FROM HistoricoPrecoAcoes 
                               LEFT JOIN Acoes ON(HistoricoPrecoAcoes.IdAcao= Acoes.Id) WHERE IdAcao=@Id and DataHora>=getdate()-30 order by DataHora asc";
                 return connection.Query<HistoricoAcao>(query, new { baseAcao.Id });
+            };
+        }
+
+        private void FuncGameficacao()
+        {
+            var infoUsuario = GetLevelUsuario(User.Identity.Name);
+            var expGanha = infoUsuario.ExpAtual + LevelUsuario.GanhaExp;
+            PutExpAtual(infoUsuario.Id, expGanha);
+            if (infoUsuario.ExpProximo <= expGanha)
+            {
+                var novoLevel = infoUsuario.LevelAtual + 1;
+                var novoExpProximo = infoUsuario.ExpProximo * 3;
+                var novaCategoria = GetIdCategoriaPorLevel(novoLevel);
+                AtualizaNovoLevel(infoUsuario.Id, novoLevel, novoExpProximo, novaCategoria);
+            }
+        }
+
+        private LevelUsuario GetLevelUsuario(string IdUsuario)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = @"SELECT * FROM LevelUsuarios WITH(NOLOCK) WHERE IdUsuario=@IdUsuario";
+                connection.Open();
+                var data = connection.QueryFirst<LevelUsuario>(query, new { IdUsuario });
+                connection.Close();
+                return data;
+            };
+        }
+
+        private int GetIdCategoriaPorLevel(int levelAtual)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = @"SELECT Id FROM CategoriasLevel WITH(NOLOCK) WHERE LevelMin<=@levelAtual and LevelMax>@levelAtual-1";
+                connection.Open();
+                var data = connection.QueryFirst<int>(query, new { levelAtual });
+                connection.Close();
+                return data;
+            };
+        }
+
+        private void PutExpAtual(int id, int expTotal)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = @"UPDATE LevelUsuarios SET ExpAtual=@expTotal WHERE Id=@id";
+                connection.Open();
+                connection.Execute(query, new { id, expTotal });
+                connection.Close();
+            };
+        }
+
+        private void AtualizaNovoLevel(int id, int novoLevel, int novoExpProximo, int novaCategoria)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = @"UPDATE LevelUsuarios SET LevelAtual=@novoLevel, ExpProximo=@novoExpProximo, IdCategoriaLevel=@novaCategoria WHERE Id=@id";
+                connection.Open();
+                connection.Execute(query, new { id, novoLevel, novoExpProximo, novaCategoria });
+                connection.Close();
             };
         }
     }
