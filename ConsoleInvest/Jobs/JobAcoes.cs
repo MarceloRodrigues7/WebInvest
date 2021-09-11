@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ConsoleInvest.Jobs
@@ -15,33 +14,51 @@ namespace ConsoleInvest.Jobs
         public bool TarefaAcoes()
         {
             List<Task> task = new();
-            var listAcoes = GetAcoes();
-            listAcoes.ForEach((acao) =>
+            GetAcoes().ForEach((acao) =>
             {
                 task.Add(Task.Factory.StartNew(() =>
                 {
-                    var valorAtual = GetValorAcao(acao);
-                    var novoValor = VariacaoValor(valorAtual);
-                    var dataAtual = DateTime.Now.AddHours(-3);
-                    PostHistorico(acao, novoValor, dataAtual);
-                    AtualizaAcao(acao, novoValor, dataAtual);
-                    Log.Information($"Id Ação: {acao} - Concluido com sucesso");
+                    AtualizaAcao(acao);
                 }));
             });
             Task.WaitAll(task.ToArray());
             task.Clear();
-            listAcoes.Clear();
             Log.Information($"Tarefa Ações finalizada.");
             return true;
         }
 
+        private void AtualizaAcao(long acao)
+        {
+            using (var connection = new SqlConnection(Services.ConnectionString))
+            {
+                connection.Open();
+                try
+                {
+                    var valorAtual = GetValorAcao(acao, connection);
+                    var novoValor = VariacaoValor(valorAtual);
+                    var dataAtual = DateTime.Now.AddHours(-3);
+                    AtualizarDb(acao, novoValor, dataAtual,connection);
+                    Log.Information($"Ação[{acao}] V.Anterior[{valorAtual}] V.Novo[{novoValor}]");
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Erro ao atualizar acao[{acao}] " + e.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            };
+        }
+
         private static List<long> GetAcoes()
         {
-            var query = "SELECT Id FROM Acoes";
+            Log.Information("Consultado lista Ações");
             try
             {
                 using (var connection = new SqlConnection(Services.ConnectionString))
                 {
+                    var query = "SELECT Id FROM Acoes";
                     connection.Open();
                     var res = connection.Query<long>(query).ToList();
                     connection.Close();
@@ -55,18 +72,14 @@ namespace ConsoleInvest.Jobs
             }
         }
 
-        private static decimal GetValorAcao(long id)
+        private static decimal GetValorAcao(long id, SqlConnection connection)
         {
-            var query = "SELECT valorAtual FROM Acoes WITH(NOLOCK) WHERE Id=@id";
+            Log.Information($"Consultado valor acao[{id}]");
             try
             {
-                using (var connection = new SqlConnection(Services.ConnectionString))
-                {
-                    connection.Open();
-                    var res = connection.QueryFirst<decimal>(query, new { id });
-                    connection.Close();
-                    return res;
-                };
+                var query = "SELECT valorAtual FROM Acoes WITH(NOLOCK) WHERE Id=@id";
+                var res = connection.QueryFirst<decimal>(query, new { id });
+                return res;
             }
             catch (Exception e)
             {
@@ -95,40 +108,31 @@ namespace ConsoleInvest.Jobs
             return variacao;
         }
 
-        private static void PostHistorico(long id, decimal valor, DateTime dataHora)
+        private void AtualizarDb(long id, decimal valor, DateTime dataHora, SqlConnection connection)
         {
             try
             {
-                var query = "INSERT INTO HistoricoPrecoAcoes(IdAcao,Valor,DataHora)VALUES(@id,@valor,@dataHora)";
-                using (var connection = new SqlConnection(Services.ConnectionString))
-                {
-                    connection.Open();
-                    connection.Execute(query, new { id, valor, dataHora });
-                    connection.Close();
-                };
+                PostHistorico(ref id, ref valor, ref dataHora, connection);
+                PutAcao(ref id, ref valor, ref dataHora, connection);
             }
             catch (Exception e)
             {
-                Log.Error($"Erro ao postar historico acao.id {id}. " + e.Message);
+                Log.Error($"Erro interno - acao.id[{id}] -> " + e.Message);
             }
         }
 
-        private static void AtualizaAcao(long id, decimal valor, DateTime dataAtualizacao)
+        private static void PostHistorico(ref long id, ref decimal valor, ref DateTime dataHora, SqlConnection connection)
         {
-            try
-            {
-                var query = "UPDATE Acoes SET valorAtual=@valor, dataAtualizacao=@dataAtualizacao WHERE Id=@id";
-                using (var connection = new SqlConnection(Services.ConnectionString))
-                {
-                    connection.Open();
-                    connection.Execute(query, new { valor, dataAtualizacao, id });
-                    connection.Close();
-                };
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Erro ao atualizar acao.id {id}. " + e.Message);
-            }
+            var query = "INSERT INTO HistoricoPrecoAcoes(IdAcao,Valor,DataHora)VALUES(@id,@valor,@dataHora)";
+            connection.Execute(query, new { id, valor, dataHora });
+            Log.Information($"Historico acao[{id}] inserido");
+        }
+
+        private static void PutAcao(ref long id, ref decimal valor, ref DateTime dataHora, SqlConnection connection)
+        {
+            var query = "UPDATE Acoes SET valorAtual=@valor, dataAtualizacao=@dataHora WHERE Id=@id";
+            connection.Execute(query, new { valor, dataHora, id });
+            Log.Information($"TbMain acao[{id}] atualizado");
         }
 
     }
