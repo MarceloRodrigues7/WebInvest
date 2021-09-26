@@ -22,6 +22,7 @@ namespace WebInvest.Models
     public class RankSaldoAtual
     {
         public string Username { get; set; }
-        public decimal Saldo { get; set; }
+        public int ExpAtual { get; set; }
+        public string Categoria { get; set; }
     }
 }

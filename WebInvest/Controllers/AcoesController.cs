@@ -65,32 +65,19 @@ namespace WebInvest.Controllers
             {
                 transferencia._BaseAcao.ValorAtual = transferencia._BaseAcao.ValorAtual * -1;
             }
-            var saldo = GetSaldoUsuario();
-            var valorTotal = transferencia.Quantidade * transferencia._BaseAcao.ValorAtual;
             try
             {
-                if (saldo > valorTotal)
-                {
-                    var ordem = new Ordem()
-                        .NovaOrdem(int.Parse(User.Identity.Name), transferencia._BaseAcao.Id, transferencia.Quantidade, transferencia._BaseAcao.ValorAtual, valorTotal, DateTime.Now, "Sucesso", true);
-                    PostOrdem(ordem);
-                    if (!ValidationInvestimentoUsuario(transferencia._BaseAcao.Id, int.Parse(User.Identity.Name)))
-                    {
-                        PostInvestimentoUsuario(transferencia._BaseAcao.Id, int.Parse(User.Identity.Name));
-                    }
-                    var quantidadeAtual = GetQuantidadeAcao(transferencia._BaseAcao.Id, int.Parse(User.Identity.Name));
-                    PutInvestimentoUsuario(transferencia._BaseAcao.Id, int.Parse(User.Identity.Name), quantidadeAtual + transferencia.Quantidade);
-                    PutSaldoUsuario(int.Parse(User.Identity.Name), saldo - valorTotal);
-                    FuncGameficacao();
-                    return RedirectToAction("Index", "Investimento");
-                }
-                TempData["Message"] = "Saldo insuficiente para realizar Compra!";
-                return View("Negociar", transferencia);
+                var valorTotal = transferencia.Quantidade * transferencia._BaseAcao.ValorAtual;
+                var ordem = new Ordem()
+                            .NovaOrdem(int.Parse(User.Identity.Name), transferencia._BaseAcao.Id, transferencia.Quantidade, transferencia._BaseAcao.ValorAtual, valorTotal, DateTime.Now, "Enviado", true);
+                PostOrdem(ordem);
+                FuncGameficacao();
+                return RedirectToAction("Index", "Transacao");
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine(ex.Message);
-                TempData["Message"] = "Ocorreu algum erro, tente novamente! " + ex.Message;
+                Console.WriteLine(e.Message);
+                TempData["Message"] = "Ocorreu algum erro, tente novamente! " + e.Message;
                 return View("Negociar", transferencia);
             }
         }
@@ -111,7 +98,7 @@ namespace WebInvest.Controllers
                         PostOrdem(ordem);
                         PutInvestimentoUsuario(transferencia._BaseAcao.Id, int.Parse(User.Identity.Name), quantidadeAtual - transferencia.Quantidade);
                         PutSaldoUsuario(int.Parse(User.Identity.Name), saldo + valorTotal);
-                        return RedirectToAction("Index", "Investimento");
+                        return RedirectToAction("Index", "Transacao");
                     }
                 }
                 TempData["Message"] = "Quantidade insuficiente para realizar venda!";

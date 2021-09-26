@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ConsoleInvest": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
