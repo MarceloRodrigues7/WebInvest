@@ -31,36 +31,44 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td class="text-center">@item.Sigla</td>
-                            <td class="text-center">@item.Quantidade</td>
-                            <td class="text-center">R$ @item.ValorUn</td>
-                            <td class="text-center">R$ @item.ValorTotal</td>
-                            <td class="text-center">@item.DataHora</td>
-                            @if (@item.StatusOrdem == "Sucesso")
-                            {
-                                <td class="text-center">
-                                    <i class="fas fa-thumbs-up" style="color:seagreen" title="Sucesso"></i>
-                                </td>
-                            }
-                            else
-                            {
-                                <td class="text-center">@item.StatusOrdem</td>
-                            }
+                    <tr>
+                        <td class="text-center">@item.Sigla</td>
+                        <td class="text-center">@item.Quantidade</td>
+                        <td class="text-center">R$ @item.ValorUn</td>
+                        <td class="text-center">R$ @item.ValorTotal</td>
+                        <td class="text-center">@item.DataHora</td>
+                        @if (@item.StatusOrdem == "Sucesso")
+                        {
+                            <td class="text-center">
+                                <i class="fas fa-thumbs-up" style="color:seagreen" title="Aprovado"></i>
+                            </td>
+                        }
+                        else if (@item.StatusOrdem == "Falha")
+                        {
+                            <td class="text-center">
+                                <i class="fas fa-thumbs-down" style="color:indianred" title="Negado"></i>
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="text-center">
+                                <i class="fas fa-business-time" style="color:sandybrown" title="Pendente"></i>
+                            </td>
+                        }
 
-                            @if (@item.Tipo == "Venda")
-                            {
-                                <td class="text-center">
-                                    <i class="fas fa-cart-plus" style="color:indianred" title="Venda"></i>
-                                </td>
-                            }
-                            else
-                            {
-                                <td class="text-center">
-                                    <i class="fas fa-cart-plus" style="color:seagreen" title="Compra"></i>
-                                </td>
-                            }
-                        </tr>
+                        @if (@item.Tipo == "Venda")
+                        {
+                            <td class="text-center">
+                                <i class="fas fa-cart-plus" style="color:indianred" title="Venda"></i>
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="text-center">
+                                <i class="fas fa-cart-plus" style="color:seagreen" title="Compra"></i>
+                            </td>
+                        }
+                    </tr>
                     }
                 </tbody>
             </table>

@@ -33,6 +33,10 @@ namespace WebInvest.Controllers
             return View();
         }
 
+        public IActionResult Contact()
+        {
+            return View();
+        }
         public IActionResult Informacoes()
         {
             return View();
@@ -127,7 +131,10 @@ namespace WebInvest.Controllers
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                var query = "SELECT Username,Saldo FROM Usuarios ORDER BY Saldo DESC";
+                var query = @"SELECT u.Username,l.ExpAtual,c.Nome as Categoria FROM Usuarios as u
+                              LEFT JOIN LevelUsuarios as l on(u.Id=l.IdUsuario)
+                              LEFT JOIN CategoriasLevel as c on(l.IdCategoriaLevel=c.Id)
+                              ORDER BY l.ExpAtual DESC";
                 var data = connection.Query<RankSaldoAtual>(query);
                 connection.Close();
                 return data;

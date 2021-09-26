@@ -36,7 +36,7 @@ namespace ConsoleInvest.Jobs
                 {
                     var valorAtual = GetValorAcao(acao, connection);
                     var novoValor = VariacaoValor(valorAtual);
-                    var dataAtual = DateTime.Now.AddHours(-3);
+                    var dataAtual = DateTime.UtcNow.AddHours(-3);
                     AtualizarDb(acao, novoValor, dataAtual,connection);
                     Log.Information($"Ação[{acao}] V.Anterior[{valorAtual}] V.Novo[{novoValor}]");
                 }
@@ -74,7 +74,6 @@ namespace ConsoleInvest.Jobs
 
         private static decimal GetValorAcao(long id, SqlConnection connection)
         {
-            Log.Information($"Consultado valor acao[{id}]");
             try
             {
                 var query = "SELECT valorAtual FROM Acoes WITH(NOLOCK) WHERE Id=@id";
@@ -91,10 +90,14 @@ namespace ConsoleInvest.Jobs
         private static decimal VariacaoValor(decimal valor)
         {
             var rand = new Random();
+            var sorteio = rand.Next(-1, 3);
             decimal variacao = GeraValor(rand);
-            if (rand.Next(-1, 3) <= 0)
+            if (valor>0)
             {
-                return valor - variacao;
+                if (sorteio <= 0)
+                {
+                    return valor - variacao;
+                }
             }
             return valor + variacao;
         }
@@ -125,14 +128,12 @@ namespace ConsoleInvest.Jobs
         {
             var query = "INSERT INTO HistoricoPrecoAcoes(IdAcao,Valor,DataHora)VALUES(@id,@valor,@dataHora)";
             connection.Execute(query, new { id, valor, dataHora });
-            Log.Information($"Historico acao[{id}] inserido");
         }
 
         private static void PutAcao(ref long id, ref decimal valor, ref DateTime dataHora, SqlConnection connection)
         {
             var query = "UPDATE Acoes SET valorAtual=@valor, dataAtualizacao=@dataHora WHERE Id=@id";
             connection.Execute(query, new { valor, dataHora, id });
-            Log.Information($"TbMain acao[{id}] atualizado");
         }
 
     }
