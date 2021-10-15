@@ -6,56 +6,63 @@
     var valoresSerializado = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(m => m.Valor).ToList()));
 }
 
-<div class="row d-flex h-100">
-    <div class="container">
-        <br />
-        <h3 class="text-left pl-5">
-            <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" fill="currentColor" class="bi bi-clipboard-data" viewBox="0 0 16 16">
-                <path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0v-1zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0V7zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0V9z"></path>
-                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"></path>
-                <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"></path>
-            </svg>
-            Gráfico
-        </h3>
-    </div>
-</div>
+<div class="container-fluid">
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p>
+                <h4 class="text-secondary ml-2">
+                    <i class="fas fa-chart-bar mr-1"></i>
+                    Informações @Model.First().Nome
+                </h4>
+            </p>
+        </div>
 
-<div class="row d-flex justify-content-center align-items-center h-100">
-    <div class="col-3">
-        <label class="form-text">Ação</label>
-        <input class="input-group" value="@Model.First().Nome" disabled />
-    </div>
-    <div class="col-2">
-        <label class="form-text">Sigla</label>
-        <input class="input-group" value="@Model.First().Sigla" disabled />
-    </div>
-    <div class="col-2">
-        <label class="form-text">Valor Atual</label>
-        <input class="input-group" value="R$ @Model.First().ValorAtual" disabled />
-    </div>
-    <div class="col-2 align-self-center">
-        @if (User.IsInRole("Usuario_Comum"))
-        {
-            <button type="button" class="btn btn-outline-success" title="Negociar" onclick="@("window.location.href='" + @Url.Action("Negociar", "Acoes", bAcao) + "'");">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-plus-fill" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zM8.5 8a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V12a.5.5 0 0 0 1 0v-1.5H10a.5.5 0 0 0 0-1H8.5V8z"></path>
-                </svg>
-            </button>
-        }
-        <button type="button" class="btn btn-outline-info" title="Historico" onclick="@("window.location.href='" + @Url.Action("Historico", "Acoes",bAcao) + "'");">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
-                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"></path>
-            </svg>
-        </button>
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-7 border">
+                <canvas id="grafico" width="400" height="150" class="mb-3"></canvas>
+            </div>
+            <div class="col-4 ml-1 mr-1 mt-2 mb-2">
+                <div class="row mb-1">
+                    <div class="col">
+                        <label class="form-text">Nome</label>
+                        <input class="input-group" value="@Model.First().Nome" disabled />
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col">
+                        <label class="form-text">Sigla</label>
+                        <input class="input-group" value="@Model.First().Sigla" disabled />
+                    </div>
+                    <div class="col">
+                        <label class="form-text">Valor Atual</label>
+                        <input class="input-group" value="R$ @Model.First().ValorAtual" disabled />
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-7">
+                        <label class="form-text">Última Atualização</label>
+                        <input class="input-group" value="@Model.First().DataHora" disabled />
+                    </div>
+                </div>
+                <div class="row mt-2 mb-1">
+                    <div class="col">
+                        @if (User.IsInRole("Usuario_Comum"))
+                        {
+                            <button type="button" class="btn btn-outline-success btn-sm" title="Negociar" onclick="@("window.location.href='" + @Url.Action("Negociar", "Acoes", bAcao) + "'");">
+                                <i class="fas fa-cart-plus"></i>
+                                Negociar
+                            </button>
+                        }
+                        <button type="button" class="btn btn-outline-info btn-sm" title="Historico" onclick="@("window.location.href='" + @Url.Action("Historico", "Acoes",bAcao) + "'");">
+                            <i class="fas fa-info"></i>
+                            Registros
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<br />
-<div class="row d-flex justify-content-center align-items-center h-100">
-    <div class="col-8">
-        <canvas id="grafico" width="400" height="150"></canvas>
-    </div>
-</div>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <script>
     var dias = @diasSerializado;
@@ -66,7 +73,7 @@
             label: '@Model.First().Sigla',
             data: valores,
             fill: false,
-            borderColor: 'rgb(75, 192, 192)'
+            borderColor: 'rgb(0,128,128)'
         }]
     };
     const config = {
@@ -80,6 +87,15 @@
                         display: false
                     }
                 }]
+            },
+            elements: {
+                point: {
+                    radius: 0
+                }
+            },
+            title: {
+                display: true,
+                text: 'Gráfico de Variação'
             }
         }
     };
