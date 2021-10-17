@@ -44,22 +44,5 @@ namespace ConsoleInvest.Jobs
             }
         }
         
-        private static void AtualizaValoresNegativos()
-        {
-            try
-            {
-                var query = "update Acoes SET valorAtual=valorAtual*-1 where valorAtual<0";
-                using (var connection = new SqlConnection(Services.ConnectionString))
-                {
-                    connection.Open();
-                    connection.Execute(query);
-                    connection.Close();
-                };
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Erro ao atualizar valores das ações. " + e.Message);
-            }
-        }
     }
 }

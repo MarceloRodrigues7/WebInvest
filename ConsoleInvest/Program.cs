@@ -34,7 +34,7 @@ namespace ConsoleInvest
         {
             JobTransacoes();
             JobAcoes();
-            JobCriptomoeda();
+            //JobCriptomoeda();
             JobInvestimentos();
             while (true)
             {
@@ -66,19 +66,6 @@ namespace ConsoleInvest
             };
             timer.Start();
             JobAcoes.TarefaAcoes();
-        }
-
-        private static void JobCriptomoeda()
-        {
-            IJobCriptomoeda JobCriptomoeda = new JobCriptomoeda();
-            Timer timer = new(180000);
-            timer.AutoReset = true;
-            timer.Elapsed += delegate
-            {
-                JobCriptomoeda.TarefaCriptomoeda();
-            };
-            timer.Start();
-            JobCriptomoeda.TarefaCriptomoeda();
         }
 
         private static void JobInvestimentos()
