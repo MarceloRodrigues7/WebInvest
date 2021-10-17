@@ -8,6 +8,6 @@ namespace ConsoleInvest.Utils
 {
     public class Services
     {
-        public static readonly string ConnectionString = "Data Source=143.244.190.244;Initial Catalog=dbWebInvest;User ID='sa';Password='P@ssword';Connect Timeout=999899999";
+        public static readonly string ConnectionString = "Data Source=143.244.190.244;Initial Catalog=dbWebInvest;User ID='sa';Password='*******';Connect Timeout=999899999";
     }
 }
