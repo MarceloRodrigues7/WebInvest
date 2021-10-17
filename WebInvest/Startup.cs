@@ -43,11 +43,6 @@ namespace WebInvest
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                         .AddCookie(options => options.LoginPath = "/Home/Index");
-
-            services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.KnownProxies.Add(IPAddress.Parse("10.0.0.100"));
-            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -61,10 +56,6 @@ namespace WebInvest
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
