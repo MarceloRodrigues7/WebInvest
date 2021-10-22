@@ -104,7 +104,7 @@ namespace WebInvest.Controllers
                     var quantidadeAtual = _investimentosRepository.GetQuantidadeAcaoUsuario(transferencia._BaseAcao.Id, int.Parse(User.Identity.Name));
                     if (transferencia.Quantidade <= quantidadeAtual)
                     {
-                        var ordem = new Ordem().NovaOrdem(int.Parse(User.Identity.Name), transferencia._BaseAcao.Id, transferencia.Quantidade, transferencia._BaseAcao.ValorAtual, valorTotal, DateTime.Now, "Sucesso", false);
+                        var ordem = new Ordem().NovaOrdem(int.Parse(User.Identity.Name), transferencia._BaseAcao.Id, transferencia.Quantidade, transferencia._BaseAcao.ValorAtual, valorTotal, DateTime.UtcNow.AddHours(-3), "Sucesso", false);
                         _ordensRepository.PostOrdem(ordem);
                         _investimentosRepository.PutInvestimentoUsuario(transferencia._BaseAcao.Id, int.Parse(User.Identity.Name), quantidadeAtual - transferencia.Quantidade);
                         _usuariosRepository.PutSaldoUsuario(int.Parse(User.Identity.Name), saldo + valorTotal);
