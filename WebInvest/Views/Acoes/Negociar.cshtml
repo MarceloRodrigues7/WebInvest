@@ -3,70 +3,84 @@
     ViewData["Title"] = "Negociar";
 }
 
-<div class="col-6 mx-auto">
-    @if (TempData["Message"] != null)
-    {
-        <div class="alert alert-danger" role="alert">
-            @TempData["Message"].ToString()
+<div class="container-fluid col-6">
+    <div class="card shadow">
+        <div class="card-header">
+            <h5 class="text-secondary ml-2 mt-1">
+                <i class="fas fa-donate mr-2"></i>
+                Ação: @Model._BaseAcao.Acao
+            </h5>
         </div>
-    }
-    <div class="row">
-        <div class="col">
-            <label class="text-break">Cod.</label>
-            <input type="text" class="form-control" value=@Model._BaseAcao.Id name="Id" disabled>
+        @if (TempData["Message"] != null)
+        {
+            <div class="row">
+                <div class="col-6 mx-auto mt-3 mb-2">
+                    <div class="alert alert-danger" role="alert">
+                        @TempData["Message"].ToString()
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <label class="text-break">Cod.</label>
+                    <input type="text" class="form-control" value=@Model._BaseAcao.Id name="Id" disabled>
+                </div>
+                <div class="col">
+                    <label class="text-break">Sigla</label>
+                    <input type="text" class="form-control" value=@Model._BaseAcao.Sigla name="inputSigla" disabled>
+                </div>
+                <div class="col">
+                    <label class="text-break">Ação</label>
+                    <input type="text" class="form-control" value=@Model._BaseAcao.Acao name="Acao" disabled>
+                </div>
+            </div>
+            <p></p>
+            <div class="row">
+                <div class="col">
+                    <label class="text-break">Data Cadastramento</label>
+                    <input type="text" class="form-control" value=@Model._BaseAcao.DataCriacao name="DataCriacao" disabled>
+                </div>
+                <div class="col">
+                    <label class="text-break">Data Atualização</label>
+                    <input type="text" class="form-control" value=@Model._BaseAcao.DataAtualizacao name="DataAtualizacao" disabled>
+                </div>
+            </div>
+            <p></p>
+            <div class="row">
+                <div class="col">
+                    <label class="text-break">Valor Atual</label>
+                    <input type="text" class="form-control" value=@Model._BaseAcao.ValorAtual name="valorAtual" disabled>
+                </div>
+                <div class="col">
+                    <label class="text-break">Quantidade</label>
+                    <input type="number" class="form-control" id="quantidade" value="" min="1" max="1000" step="1" required />
+                </div>
+                <div class="col">
+                    <label class="text-break">Valor Total</label>
+                    <input type="text" class="form-control" name="ValorTotal" disabled />
+                </div>
+            </div>
         </div>
-        <div class="col">
-            <label class="text-break">Sigla</label>
-            <input type="text" class="form-control" value=@Model._BaseAcao.Sigla name="inputSigla" disabled>
-        </div>
-        <div class="col">
-            <label class="text-break">Ação</label>
-            <input type="text" class="form-control" value=@Model._BaseAcao.Acao name="Acao" disabled>
-        </div>
-    </div>
-    <p></p>
-    <div class="row">
-        <div class="col">
-            <label class="text-break">Data Cadastramento</label>
-            <input type="text" class="form-control" value=@Model._BaseAcao.DataCriacao name="DataCriacao" disabled>
-        </div>
-        <div class="col">
-            <label class="text-break">Data Atualização</label>
-            <input type="text" class="form-control" value=@Model._BaseAcao.DataAtualizacao name="DataAtualizacao" disabled>
-        </div>
-    </div>
-    <p></p>
-    <div class="row">
-        <div class="col">
-            <label class="text-break">Valor Atual</label>
-            <input type="text" class="form-control" value=@Model._BaseAcao.ValorAtual name="valorAtual" disabled>
-        </div>
-        <div class="col">
-            <label class="text-break">Quantidade</label>
-            <input type="number" class="form-control" id="quantidade" value="0" min="1" max="1000" step="1" required />
-        </div>
-        <div class="col">
-            <label class="text-break">Valor Total</label>
-            <input type="text" class="form-control" name="ValorTotal" disabled />
+        <div class="mx-auto mb-3">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <button type="button" class="btn btn-primary" title="Comprar" data-toggle="modal" data-target="#modelCompra">Comprar</button>
+                <button type="button" class="btn btn-danger" title="Vender" data-toggle="modal" data-target="#modelVenda">Vender</button>
+            </div>
         </div>
     </div>
 </div>
-<br />
-<div class="col-3 mx-auto">
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        <button type="button" class="btn btn-primary btn-lg" title="Comprar" data-toggle="modal" data-target="#modelCompra">Comprar</button>
-        <button type="button" class="btn btn-danger btn-lg" title="Vender" data-toggle="modal" data-target="#modelVenda">Vender</button>
-    </div>
-</div>
+
 <div class="modal fade" id="modelVenda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    @using (Html.BeginForm("Vender", "Acoes", FormMethod.Post, new { @class = "needs-validation", @novalidate = true }))
+    @using (Html.BeginForm("Vender", "Acoes", FormMethod.Post, new { @class = "needs-validation"}))
     {
         @Html.ValidationSummary()
         @Html.AntiForgeryToken()
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Compra: @Model._BaseAcao.Acao</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Venda: @Model._BaseAcao.Acao</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -93,20 +107,20 @@
                         </div>
                         <div class="col">
                             <label class="text-break">Valor Total</label>
-                            <input type="text" class="form-control" name="ValorTotal3" disabled />
+                            <input type="text" class="form-control" name="ValorTotal3" required readonly />
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success btn-sm">Vender</button>
+                    <button type="submit" class="btn btn-success btn-sm">Confirmar</button>
                 </div>
             </div>
         </div>
     }
 </div>
 <div class="modal fade" id="modelCompra" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    @using (Html.BeginForm("Comprar", "Acoes", FormMethod.Post, new { @class = "needs-validation", @novalidate = true }))
+    @using (Html.BeginForm("Comprar", "Acoes", FormMethod.Post, new { @class = "needs-validation" }))
     {
         @Html.ValidationSummary()
         @Html.AntiForgeryToken()
@@ -140,13 +154,13 @@
                         </div>
                         <div class="col">
                             <label class="text-break">Valor Total</label>
-                            <input type="text" class="form-control" name="ValorTotal2" disabled />
+                            <input type="text" class="form-control" name="ValorTotal2" required readonly />
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success btn-sm">Comprar</button>
+                    <button type="submit" class="btn btn-success btn-sm">Confirmar</button>
                 </div>
             </div>
         </div>
@@ -173,4 +187,21 @@
             document.querySelector("input[id='txtId']").value = id.value;
         }
     });
+</script>
+<script>
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            var forms = document.getElementsByClassName('needs-validation');
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
 </script>

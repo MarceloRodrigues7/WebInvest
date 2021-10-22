@@ -41,7 +41,7 @@ namespace WebInvest.Repositorys
             using (var connection = new SqlConnection(_connectionString))
             {
                 var query = @"SELECT Acoes.Id,Acoes.sigla,Acoes.acao AS 'Nome',Acoes.ValorAtual,HistoricoPrecoAcoes.DataHora,HistoricoPrecoAcoes.Valor FROM HistoricoPrecoAcoes 
-                              LEFT JOIN Acoes ON(HistoricoPrecoAcoes.IdAcao= Acoes.Id) WHERE IdAcao=@id and DataHora>=getdate()-5 order by DataHora asc";
+                              LEFT JOIN Acoes ON(HistoricoPrecoAcoes.IdAcao= Acoes.Id) WHERE IdAcao=@id and DataHora>=getdate()-1 order by DataHora asc";
                 return connection.Query<HistoricoAcao>(query, new { id });
             };
         }
