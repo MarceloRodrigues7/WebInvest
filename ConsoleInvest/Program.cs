@@ -34,7 +34,6 @@ namespace ConsoleInvest
         {
             JobTransacoes();
             JobAcoes();
-            //JobCriptomoeda();
             JobInvestimentos();
             while (true)
             {

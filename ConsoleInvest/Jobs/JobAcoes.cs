@@ -78,7 +78,7 @@ namespace ConsoleInvest.Jobs
         private static decimal VariacaoValor(decimal valor)
         {
             var rand = new Random();
-            var sorteio = rand.Next(-1, 1);
+            var sorteio = rand.Next(-2, 2);
             decimal variacao = GeraValor(rand);
             if (sorteio < 0)
             {

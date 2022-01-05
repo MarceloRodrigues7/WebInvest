@@ -148,7 +148,7 @@ namespace WebInvest.Controllers
                 var query = @"SELECT l.Id,l.IdUsuario,l.LevelAtual,l.ExpAtual,l.ExpProximo,c.Nome AS Categoria,l.IdCategoriaLevel FROM LevelUsuarios AS l WITH(NOLOCK) 
                               LEFT JOIN CategoriasLevel AS c WITH(NOLOCK) ON(l.IdCategoriaLevel=c.Id) WHERE l.IdUsuario=@IdUsuario";
                 connection.Open();
-                var data = connection.QueryFirst<LevelUsuario>(query, new { IdUsuario });
+                var data = connection.QueryFirstOrDefault<LevelUsuario>(query, new { IdUsuario });
                 connection.Close();
                 return data;
             };
