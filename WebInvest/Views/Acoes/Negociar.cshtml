@@ -1,4 +1,4 @@
-﻿@model Transferencia
+@model Transferencia
 @{
     ViewData["Title"] = "Negociar";
 }
@@ -73,11 +73,7 @@
 </div>
 
 <div class="modal fade" id="modelVenda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-<<<<<<< release
     @using (Html.BeginForm("Vender", "Acoes", FormMethod.Post, new { @class = "needs-validation" }))
-=======
-    @using (Html.BeginForm("Vender", "Acoes", FormMethod.Post, new { @class = "needs-validation"}))
->>>>>>> Melhorias de frontend
     {
         @Html.ValidationSummary()
         @Html.AntiForgeryToken()
@@ -208,8 +204,5 @@
             });
         }, false);
     })();
-<<<<<<< release
 </script>
-=======
-</script>
->>>>>>> Melhorias de frontend
+
