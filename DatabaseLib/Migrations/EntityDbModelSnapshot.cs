@@ -19,6 +19,27 @@ namespace DatabaseLib.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
+            modelBuilder.Entity("DatabaseLib.Domain.CategoriaLevel", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("LevelMax")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LevelMin")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CategoriasLevel");
+                });
+
             modelBuilder.Entity("DatabaseLib.Domain.HistoricoPreco", b =>
                 {
                     b.Property<long>("Id")
@@ -58,16 +79,44 @@ namespace DatabaseLib.Migrations
                     b.Property<long>("UsuarioId")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("UsuarioId1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProdutoId");
 
-                    b.HasIndex("UsuarioId1");
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("InvestimentosUsuario");
+                });
+
+            modelBuilder.Entity("DatabaseLib.Domain.LevelUsuario", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<long>("CategoriaLevelId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ExpAtual")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExpProximo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LevelAtual")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UsuarioId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoriaLevelId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("LevelUsuarios");
                 });
 
             modelBuilder.Entity("DatabaseLib.Domain.Ordem", b =>
@@ -173,9 +222,9 @@ namespace DatabaseLib.Migrations
 
             modelBuilder.Entity("DatabaseLib.Domain.Usuario", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .UseIdentityColumn();
 
                     b.Property<DateTime>("DataAlteracao")
@@ -231,9 +280,30 @@ namespace DatabaseLib.Migrations
 
                     b.HasOne("DatabaseLib.Domain.Usuario", "Usuario")
                         .WithMany("InvestimentosUsuario")
-                        .HasForeignKey("UsuarioId1");
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Produto");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("DatabaseLib.Domain.LevelUsuario", b =>
+                {
+                    b.HasOne("DatabaseLib.Domain.CategoriaLevel", "CategoriaLevel")
+                        .WithMany("LevelUsuarios")
+                        .HasForeignKey("CategoriaLevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DatabaseLib.Domain.Usuario", "Usuario")
+                        .WithMany("LevelUsuarios")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CategoriaLevel");
 
                     b.Navigation("Usuario");
                 });
@@ -247,6 +317,11 @@ namespace DatabaseLib.Migrations
                         .IsRequired();
 
                     b.Navigation("Tipo");
+                });
+
+            modelBuilder.Entity("DatabaseLib.Domain.CategoriaLevel", b =>
+                {
+                    b.Navigation("LevelUsuarios");
                 });
 
             modelBuilder.Entity("DatabaseLib.Domain.Produto", b =>
@@ -264,6 +339,8 @@ namespace DatabaseLib.Migrations
             modelBuilder.Entity("DatabaseLib.Domain.Usuario", b =>
                 {
                     b.Navigation("InvestimentosUsuario");
+
+                    b.Navigation("LevelUsuarios");
                 });
 #pragma warning restore 612, 618
         }

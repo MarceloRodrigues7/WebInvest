@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DatabaseLib.Domain;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace WebInvest.Repositorys
             _connectionString = configuration.GetConnectionString("DataServer");
         }
 
-        public void AtualizaNovoLevel(int id, int novoLevel, int novoExpProximo, int novaCategoria)
+        public void AtualizaNovoLevel(long id, int novoLevel, int novoExpProximo, int novaCategoria)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -53,7 +54,7 @@ namespace WebInvest.Repositorys
             };
         }
 
-        public void PutExpAtual(int id, int expTotal)
+        public void PutExpAtual(long id, int expTotal)
         {
             using (var connection = new SqlConnection(_connectionString))
             {

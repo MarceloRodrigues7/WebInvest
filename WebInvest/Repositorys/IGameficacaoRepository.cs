@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DatabaseLib.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace WebInvest.Repositorys
     {
         LevelUsuario GetLevelUsuario(string IdUsuario);
         int GetIdCategoriaPorLevel(int levelAtual);
-        void PutExpAtual(int id, int expTotal);
-        void AtualizaNovoLevel(int id, int novoLevel, int novoExpProximo, int novaCategoria);
+        void PutExpAtual(long id, int expTotal);
+        void AtualizaNovoLevel(long id, int novoLevel, int novoExpProximo, int novaCategoria);
     }
 }

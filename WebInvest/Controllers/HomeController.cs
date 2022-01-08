@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DatabaseLib.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

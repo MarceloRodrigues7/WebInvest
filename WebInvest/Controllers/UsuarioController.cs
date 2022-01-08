@@ -1,4 +1,6 @@
 ﻿using Dapper;
+using DatabaseLib.Domain;
+using DatabaseLib.Repository;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -17,11 +19,15 @@ namespace WebInvest.Controllers
 {
     public class UsuarioController : Controller
     {
+        private readonly IUsuariosRepository _usuariosRepository;
+        private readonly ILevelUsuariosRepository _levelUsuariosRepository;
         private readonly string _connectionString;
 
         public UsuarioController(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DataServer");
+            _usuariosRepository = new UsuariosRepository();
+            _levelUsuariosRepository = new LevelUsuariosRepository();
         }
 
         public IActionResult Cadastrar()
@@ -52,15 +58,10 @@ namespace WebInvest.Controllers
         {
             try
             {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    connection.Open();
-                    var query = @"INSERT INTO Usuarios(Username,Password,Email,Nome,Sobrenome,DataNascimento,Saldo,DataAlteracao)
-                              VALUES(@Username,@Password,@Email,@Nome,@Sobrenome,@DataNascimento,1000,getdate())";
-                    var data = connection.Execute(query, new { usuario.Username, usuario.Password, usuario.Email, usuario.Nome, usuario.Sobrenome, usuario.DataNascimento });
-                    connection.Close();
-                    return View("Login");
-                };
+                usuario.Saldo = 1000;
+                usuario.DataAlteracao = DateTime.UtcNow.AddHours(-3);
+                _usuariosRepository.Post(usuario);
+                return View("Login");
             }
             catch (Exception ex)
             {
@@ -73,15 +74,9 @@ namespace WebInvest.Controllers
         [Authorize]
         public IActionResult Cadastro()
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                var query = "SELECT * FROM Usuarios WHERE Id=@Id";
-                var data = connection.QueryFirst<Usuario>(query, new { Id = User.Identity.Name });
-                connection.Close();
-                ViewBag.LevelUsuario = GetLevel();
-                return View(data);
-            };
+            var data = _usuariosRepository.GetUsuario(long.Parse(User.Identity.Name));
+            ViewBag.LevelUsuario = _levelUsuariosRepository.GetLevelECategoriaUsuario(long.Parse(User.Identity.Name));
+            return View(data);
         }
 
         public IActionResult AutenticacaoUsuario(Usuario usuario)
@@ -90,27 +85,21 @@ namespace WebInvest.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    using (var connection = new SqlConnection(_connectionString))
+                    var res = _usuariosRepository.GetUsuario(usuario);
+                    if (res != null)
                     {
-                        var query = "SELECT Id FROM Usuarios WITH(NOLOCK) WHERE Username=@Username AND Password=@Password";
-                        connection.Open();
-                        var res = connection.QueryFirstOrDefault<int>(query, new { usuario.Username, usuario.Password });
-                        connection.Close();
-                        if (res > 0)
-                        {
-                            usuario.Id = res;
-                            GeraIdentity(usuario);
-                            ValidaLevelUsuario(usuario.Id);
-                            return RedirectToAction("Index", "Home");
-                        }
-                    };
+                        usuario.Id = res.Id;
+                        GeraIdentity(usuario);
+                        ValidaLevelUsuario(usuario.Id);
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 TempData["Message"] = "Login Falhou. Username ou Senha inválido";
                 return View("Login");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                TempData["Message"] = "Ocorreu algum erro, tente novamente!";
+                TempData["Message"] = $"Ocorreu algum erro, tente novamente! {e.Message}";
                 return View("Login");
             }
         }
@@ -133,48 +122,12 @@ namespace WebInvest.Controllers
             HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal, propriedadesDeAutenticacao);
         }
 
-        private LevelUsuario GetLevel()
+        private void ValidaLevelUsuario(long name)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            if (!_levelUsuariosRepository.ValidaUsuarioTabelaLevel(name))
             {
-                connection.Open();
-                var query = @"SELECT l.Id,l.IdUsuario,l.LevelAtual,l.ExpAtual,l.ExpProximo,c.Nome AS Categoria,l.IdCategoriaLevel FROM LevelUsuarios AS l WITH(NOLOCK) 
-                              LEFT JOIN CategoriasLevel AS c WITH(NOLOCK) ON(l.IdCategoriaLevel=c.Id) WHERE IdUsuario=@Id";
-                var data = connection.QueryFirst<LevelUsuario>(query, new { Id = User.Identity.Name });
-                connection.Close();
-                return data;
-            };
-        }
-
-        private void ValidaLevelUsuario(int name)
-        {
-            if (!ValidaUsuarioTabelaLevel(name))
-            {
-                PostUsuarioTabelaLevel(name);
+                _levelUsuariosRepository.PostNovoUsuario(name);
             }
-        }
-
-        private bool ValidaUsuarioTabelaLevel(int name)
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                var query = "SELECT COUNT(*) FROM LevelUsuarios WHERE IdUsuario=@name";
-                var data = connection.QueryFirst<int>(query, new { name });
-                connection.Close();
-                return data > 0;
-            };
-        }
-
-        private void PostUsuarioTabelaLevel(int name)
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                var query = "INSERT INTO LevelUsuarios(IdUsuario) VALUES(@name)";
-                connection.Execute(query, new { name });
-                connection.Close();
-            };
         }
 
     }

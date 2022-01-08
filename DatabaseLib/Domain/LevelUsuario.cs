@@ -10,10 +10,11 @@ namespace DatabaseLib.Domain
     {
         public long Id { get; set; }
         public long UsuarioId { get; set; }
+        public long CategoriaLevelId { get; set; }
         public int LevelAtual { get; set; }
         public int ExpAtual { get; set; }
         public int ExpProximo { get; set; }
-        public long CategoriaLevelId { get; set; }
+        
 
         public Usuario Usuario { get; set; }
         public CategoriaLevel CategoriaLevel { get; set; }
