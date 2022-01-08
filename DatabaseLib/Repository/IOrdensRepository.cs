@@ -9,6 +9,8 @@ namespace DatabaseLib.Repository
 {
     public interface IOrdensRepository
     {
+        int GetTotalOrdensVenda(long idUsuario);
+        int GetTotalOrdensCompra(long idUsuario);
         IEnumerable<Ordem> GetOrdensStatusEnviado();
         void Put(Ordem ordem);
         void PostOrdem(Ordem ordem);

@@ -12,5 +12,6 @@ namespace DatabaseLib.Repository
         public LevelUsuario GetLevelECategoriaUsuario(long idUsuario);
         bool ValidaUsuarioTabelaLevel(long idUsuario);
         void PostNovoUsuario(long idUsuario);
+        IEnumerable<LevelUsuario> GetLevelECategoriaUsuarios();
     }
 }

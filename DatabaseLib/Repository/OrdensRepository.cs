@@ -16,6 +16,18 @@ namespace DatabaseLib.Repository
             return context.Ordens.Where(o => o.StatusOrdem == "Enviado");
         }
 
+        public int GetTotalOrdensCompra(long idUsuario)
+        {
+            var context = new EntityDb();
+            return context.Ordens.Where(o => o.IdUsuario == idUsuario && o.Tipo == true).Count();
+        }
+
+        public int GetTotalOrdensVenda(long idUsuario)
+        {
+            var context = new EntityDb();
+            return context.Ordens.Where(o => o.IdUsuario == idUsuario && o.Tipo == false).Count();
+        }
+
         public void PostOrdem(Ordem ordem)
         {
             var context = new EntityDb();

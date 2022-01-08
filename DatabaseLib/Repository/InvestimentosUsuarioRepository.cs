@@ -10,7 +10,13 @@ namespace DatabaseLib.Repository
 {
     public class InvestimentosUsuarioRepository : IInvestimentosUsuarioRepository
     {
-        public int GetQuantidadeAcao(long idAcao, int idUsuario)
+        public IEnumerable<InvestimentoUsuario> GetInvestimentoUsuarios(long idUsuario)
+        {
+            var context = new EntityDb();
+            return context.InvestimentosUsuario.Where(i => i.UsuarioId == idUsuario);
+        }
+
+        public int GetQuantidadeAcao(long idAcao, long idUsuario)
         {
             var context = new EntityDb();
             return context.InvestimentosUsuario
@@ -19,7 +25,7 @@ namespace DatabaseLib.Repository
                 .FirstOrDefault();
         }
 
-        public void PostInvestimentoUsuario(long idProduto, int idUsuario)
+        public void PostInvestimentoUsuario(long idProduto, long idUsuario)
         {
             var context = new EntityDb();
             var data = new InvestimentoUsuario
@@ -32,7 +38,7 @@ namespace DatabaseLib.Repository
             context.SaveChanges();
         }
 
-        public void PutInvestimentoUsuario(long idProduto, int idUsuario, int quantidade)
+        public void PutInvestimentoUsuario(long idProduto, long idUsuario, int quantidade)
         {
             var context = new EntityDb();
             var data = context.InvestimentosUsuario.Where(i => i.UsuarioId == idUsuario && i.ProdutoId == idProduto).FirstOrDefault();
@@ -41,7 +47,7 @@ namespace DatabaseLib.Repository
             context.SaveChanges();
         }
 
-        public bool ValidaAcaoUsuario(long idProduto, int idUsuario)
+        public bool ValidaAcaoUsuario(long idProduto, long idUsuario)
         {
             var context = new EntityDb();
             var res = context.InvestimentosUsuario.Where(i => i.UsuarioId == idUsuario && i.ProdutoId == idProduto);

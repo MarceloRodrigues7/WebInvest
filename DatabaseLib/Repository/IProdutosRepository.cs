@@ -10,6 +10,7 @@ namespace DatabaseLib.Repository
     public interface IProdutosRepository
     {
         IEnumerable<Produto> GetProdutos();
+        decimal GetValorProduto(long idProduto);
         void Post(Produto produto);
         void Put(Produto produto);
     }

@@ -17,6 +17,12 @@ namespace DatabaseLib.Repository
             return context.LevelUsuarios.Where(l => l.UsuarioId == idUsuario).Include(l => l.CategoriaLevel).FirstOrDefault();
         }
 
+        public IEnumerable<LevelUsuario> GetLevelECategoriaUsuarios()
+        {
+            var context = new EntityDb();
+            return context.LevelUsuarios.Include(l => l.CategoriaLevel).Include(l=>l.Usuario);
+        }
+
         public void PostNovoUsuario(long idUsuario)
         {
             var context = new EntityDb();

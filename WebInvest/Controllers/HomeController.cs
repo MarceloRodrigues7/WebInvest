@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using DatabaseLib.Domain;
+using DatabaseLib.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -15,13 +16,22 @@ namespace WebInvest.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IUsuariosRepository _usuariosRepository;
+        private readonly IOrdensRepository _ordensRepository;
+        private readonly ILevelUsuariosRepository _levelUsuariosRepository;
+        private readonly IInvestimentosUsuarioRepository _investimentosUsuarioRepository;
+        private readonly IProdutosRepository _produtosRepository;
+
         private readonly string _connectionString;
 
         public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
         {
-            _logger = logger;
             _connectionString = configuration.GetConnectionString("DataServer");
+            _usuariosRepository = new UsuariosRepository();
+            _ordensRepository = new OrdensRepository();
+            _levelUsuariosRepository = new LevelUsuariosRepository();
+            _investimentosUsuarioRepository = new InvestimentosUsuarioRepository();
+            _produtosRepository = new ProdutosRepository();
         }
 
         public IActionResult Index()
@@ -51,8 +61,8 @@ namespace WebInvest.Controllers
 
         private IEnumerable<RankSaldoAtual> GetDashBoard()
         {
-            var idUsuario = User.Identity.Name;
-            var saldo = GetSaldoUsuario(idUsuario);
+            var idUsuario = long.Parse(User.Identity.Name);
+            var saldo = _usuariosRepository.GetSaldoUsuario(idUsuario);
             var ordens = GetOrdensInvest(idUsuario);
             var investido = GetSaldoInvestidoUsuario(idUsuario);
             var rankSaldoAtual = GetRankSaldo();
@@ -63,96 +73,45 @@ namespace WebInvest.Controllers
                 Vendas = ordens.Vendas,
                 Compras = ordens.Compras
             };
-            ViewBag.LevelUsuario = GetLevelUsuario(idUsuario);
+            ViewBag.LevelUsuario = _levelUsuariosRepository.GetLevelECategoriaUsuario(idUsuario);
             return rankSaldoAtual;
         }
 
-        private decimal GetSaldoUsuario(string id)
+        private BaseDashboard GetOrdensInvest(long idUsuario)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            return new BaseDashboard
             {
-                connection.Open();
-                var query = "SELECT Saldo FROM Usuarios AS u WITH(NOLOCK) WHERE Id=@id";
-                var data = connection.QueryFirstOrDefault<decimal>(query, new { id });
-                connection.Close();
-                return data;
+                Compras = _ordensRepository.GetTotalOrdensCompra(idUsuario),
+                Vendas = _ordensRepository.GetTotalOrdensVenda(idUsuario)
             };
         }
 
-        private BaseDashboard GetOrdensInvest(string id)
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                var query = @"SELECT TOP (1) (SELECT COUNT(*) FROM OrdensInvest WITH(NOLOCK) WHERE Tipo=0 AND IdUsuario=@id) AS Vendas, 
-                              (SELECT COUNT(*) FROM OrdensInvest WITH(NOLOCK) WHERE Tipo=1 AND IdUsuario=@id) AS Compras
-                              FROM OrdensInvest WITH(NOLOCK) WHERE IdUsuario=@id";
-                var data = connection.QueryFirstOrDefault<BaseDashboard>(query, new { id });
-                connection.Close();
-                if (data == null)
-                {
-                    return new BaseDashboard { Compras = 0, Vendas = 0 };
-                }
-                return data;
-            };
-        }
-
-        private decimal GetSaldoInvestidoUsuario(string id)
+        private decimal GetSaldoInvestidoUsuario(long idUsuario)
         {
             decimal valorInvestido = 0;
-            using (var connection = new SqlConnection(_connectionString))
+            var produtos = _investimentosUsuarioRepository.GetInvestimentoUsuarios(idUsuario);
+            foreach (var produto in produtos)
             {
-                connection.Open();
-                var query = "SELECT IdAcao,Quantidade FROM InvestimentosUsuarios WITH(NOLOCK) WHERE IdUsuario=@id";
-                var data = connection.Query<AcaoQuantidade>(query, new { id }).ToList();
-                connection.Close();
-                foreach (var acao in data)
-                {
-                    var valorAcao = GetValorAcao(acao.IdAcao.ToString());
-                    valorInvestido += valorAcao * acao.Quantidade.Value;
-                }
-                return valorInvestido;
-            };
-        }
-
-        private decimal GetValorAcao(string id)
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                var query = "SELECT ValorAtual FROM Acoes WITH(NOLOCK) WHERE Id=@id";
-                var data = connection.QueryFirstOrDefault<decimal>(query, new { id });
-                connection.Close();
-                return data;
-            };
+                var valorAcao = _produtosRepository.GetValorProduto(produto.Id);
+                valorInvestido += valorAcao * produto.Quantidade;
+            }
+            return valorInvestido;
         }
 
         private IEnumerable<RankSaldoAtual> GetRankSaldo()
         {
-            using (var connection = new SqlConnection(_connectionString))
+            var list = new List<RankSaldoAtual>();
+            var res = _levelUsuariosRepository.GetLevelECategoriaUsuarios();
+            foreach (var r in res)
             {
-                connection.Open();
-                var query = @"SELECT u.Username,l.ExpAtual,c.Nome as Categoria FROM Usuarios as u
-                              LEFT JOIN LevelUsuarios as l on(u.Id=l.IdUsuario)
-                              LEFT JOIN CategoriasLevel as c on(l.IdCategoriaLevel=c.Id)
-                              ORDER BY l.ExpAtual DESC";
-                var data = connection.Query<RankSaldoAtual>(query);
-                connection.Close();
-                return data;
-            };
-        }
-
-        private LevelUsuario GetLevelUsuario(string IdUsuario)
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                var query = @"SELECT l.Id,l.IdUsuario,l.LevelAtual,l.ExpAtual,l.ExpProximo,c.Nome AS Categoria,l.IdCategoriaLevel FROM LevelUsuarios AS l WITH(NOLOCK) 
-                              LEFT JOIN CategoriasLevel AS c WITH(NOLOCK) ON(l.IdCategoriaLevel=c.Id) WHERE l.IdUsuario=@IdUsuario";
-                connection.Open();
-                var data = connection.QueryFirstOrDefault<LevelUsuario>(query, new { IdUsuario });
-                connection.Close();
-                return data;
-            };
+                list.Add(new RankSaldoAtual
+                {
+                    ExpAtual = r.ExpAtual,
+                    Categoria = r.CategoriaLevel.Nome,
+                    Username = r.Usuario.Username
+                });
+            }
+            return list;
         }
     }
 }

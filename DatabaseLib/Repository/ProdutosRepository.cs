@@ -24,6 +24,12 @@ namespace DatabaseLib.Repository
             }
         }
 
+        public decimal GetValorProduto(long idProduto)
+        {
+            var context = new EntityDb();
+            return context.Produtos.Where(p => p.Id == idProduto).First().ValorAtual;
+        }
+
         public void Post(Produto produto)
         {
             using (var context = new EntityDb())
