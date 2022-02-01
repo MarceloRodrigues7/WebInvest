@@ -1,4 +1,4 @@
-﻿@model IEnumerable<InvestimentoUsuario>
+﻿@model IEnumerable<DatabaseLib.Domain.InvestimentoUsuario>
 @{
     ViewData["Title"] = "Investimentos";
 }
@@ -31,26 +31,20 @@
                     {
                         <tr>
                             <td class="text-center">@item.Id</td>
-                            <td class="text-center">@item.Sigla</td>
+                            <td class="text-center">@item.Produto.Sigla</td>
                             <td class="text-center">@item.Quantidade</td>
-                            @if (@item.ValorAtual < 0)
+                            @if (@item.Produto.ValorAtual < 0)
                             {
-                                <td class="text-center" style="color:indianred">R$ @item.ValorAtual</td>
+                                <td class="text-center" style="color:indianred">R$ @item.Produto.ValorAtual</td>
                             }
                             else
                             {
-                                <td class="text-center" style="color:seagreen">R$ @item.ValorAtual</td>
+                                <td class="text-center" style="color:seagreen">R$ @item.Produto.ValorAtual</td>
                             }
 
-                            <td>@item.DataAtualizacao</td>
-                            @if (@item.AoVender < 0)
-                            {
-                                <td class="text-center" style="color:indianred">R$ @item.AoVender</td>
-                            }
-                            else
-                            {
-                                <td class="text-center" style="color:seagreen">R$ @item.AoVender</td>
-                            }
+                            <td>@item.Produto.DataAtualizacao</td>
+                            <td class="text-center">R$ @item.Produto.ValorAtual</td>
+
                             <td class="text-sm-center">
                                 <button type="button" class="btn btn-outline-success btn-sm" title="Negociar" onclick="@("window.location.href='" + @Url.Action("Negociar", "Acoes",item) + "'");">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-plus-fill" viewBox="0 0 16 16">
