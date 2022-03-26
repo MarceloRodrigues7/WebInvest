@@ -23,14 +23,13 @@ namespace ConsoleInvest
                 .CreateLogger();
             Log.Information("Iniciando tarefas");
             Iniciar();
-            Log.Information("Taredas finalizadas");
+            Log.Information("Tarefas finalizadas");
         }
 
         private static void Iniciar()
         {
             TarefaProdutos();
             TarefaTransacoes();
-
             while (true)
             {
                 Console.ReadLine();
@@ -39,15 +38,15 @@ namespace ConsoleInvest
 
         private static void TarefaProdutos()
         {
-            var jobAcoes = new JobProdutos();
+            var jobProdutos = new JobProdutos();
             Timer timer = new(180000);
             timer.AutoReset = true;
             timer.Elapsed += delegate
             {
-                jobAcoes.TarefaProdutos();
+                jobProdutos.TarefaProdutos();
             };
             timer.Start();
-            jobAcoes.TarefaProdutos();
+            jobProdutos.TarefaProdutos();
         }
 
         private static void TarefaTransacoes()

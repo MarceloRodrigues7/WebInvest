@@ -1,5 +1,6 @@
 ﻿using DatabaseLib.Context;
 using DatabaseLib.Domain;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace DatabaseLib.Repository
         public IEnumerable<InvestimentoUsuario> GetInvestimentoUsuarios(long idUsuario)
         {
             var context = new EntityDb();
-            return context.InvestimentosUsuario.Where(i => i.UsuarioId == idUsuario);
+            return context.InvestimentosUsuario.Include(i=>i.Produto).Where(i => i.UsuarioId == idUsuario);
         }
 
         public int GetQuantidadeAcao(long idAcao, long idUsuario)

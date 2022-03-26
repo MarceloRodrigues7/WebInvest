@@ -33,6 +33,8 @@ namespace WebInvest
             services.AddSingleton<IInvestimentosRepository, InvestimentosRepository>();
             services.AddSingleton<IGameficacaoRepository, GameficacaoRepository>();
             services.AddSingleton<IUsuariosRepository, UsuariosRepository>();
+            services.AddSingleton<IProdutosRepository, ProdutosRepository>();
+            services.AddSingleton<IHistoricoPrecosRepository, HistoricoPrecosRepository>();
 
             services.AddControllersWithViews();
 
@@ -44,6 +46,8 @@ namespace WebInvest
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                         .AddCookie(options => options.LoginPath = "/Home/Index");
+
+            services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

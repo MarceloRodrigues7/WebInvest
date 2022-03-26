@@ -1,4 +1,5 @@
-﻿using DatabaseLib.Domain;
+﻿using ConsoleInvest.Business;
+using DatabaseLib.Domain;
 using DatabaseLib.Repository;
 using Serilog;
 using System;
@@ -37,9 +38,9 @@ namespace ConsoleInvest.Jobs
 
         private void Atualiza(Produto produto)
         {
-            var historico = HistoricoPreco.GeraObj(produto);
+            var historico = HistoricoPrecoBusiness.GeraObj(produto);
             _historicoPrecosRepository.Post(historico);
-            produto = Produto.AtualizaObj(produto, historico);
+            produto = ProdutoBusiness.AtualizaObj(produto, historico);
             _produtosRepository.Put(produto);
             Log.Information($"Ação[{produto.Sigla}] | Valor[{produto.ValorAtual}]");
         }

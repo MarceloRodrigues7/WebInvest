@@ -16,15 +16,17 @@ namespace WebInvest.Controllers
 {
     public class AcoesController : Controller
     {
-        private readonly IAcoesRepository _acoesRepository;
+        private readonly IProdutosRepository _produtosRepository;
+        private readonly IHistoricoPrecosRepository _historicoPrecosRepository;
         private readonly IOrdensRepository _ordensRepository;
         private readonly IInvestimentosRepository _investimentosRepository;
         private readonly IGameficacaoRepository _gameficacaoRepository;
         private readonly IUsuariosRepository _usuariosRepository;
 
-        public AcoesController(IAcoesRepository acoesRepository, IOrdensRepository ordensRepository, IInvestimentosRepository investimentosRepository, IGameficacaoRepository gameficacaoRepository, IUsuariosRepository usuariosRepository)
+        public AcoesController(IProdutosRepository produtosRepository, IHistoricoPrecosRepository historicoPrecosRepository, IOrdensRepository ordensRepository, IInvestimentosRepository investimentosRepository, IGameficacaoRepository gameficacaoRepository, IUsuariosRepository usuariosRepository)
         {
-            _acoesRepository = acoesRepository;
+            _produtosRepository = produtosRepository;
+            _historicoPrecosRepository = historicoPrecosRepository;
             _ordensRepository = ordensRepository;
             _investimentosRepository = investimentosRepository;
             _gameficacaoRepository = gameficacaoRepository;
@@ -33,29 +35,29 @@ namespace WebInvest.Controllers
 
         public IActionResult Index()
         {
-            var data = _acoesRepository.GetAcoes();
+            var data = _produtosRepository.GetProdutos();
             return View(data);
         }
 
         public IActionResult Informacao(BaseAcao baseAcao)
         {
-            var data = _acoesRepository.GetHistoricoAcao(baseAcao.Id);
+            var data = _historicoPrecosRepository.GetHistoricoPrecos(baseAcao.Id);
             return View(data);
         }
 
         public IActionResult Historico(BaseAcao baseAcao)
         {
-            var data = _acoesRepository.GetHistoricoAcao(baseAcao.Id);
+            var data = _historicoPrecosRepository.GetHistoricoPrecos(baseAcao.Id);
             return View(data);
         }
 
         [Authorize]
         public IActionResult Negociar(BaseAcao baseAcao)
         {
-            var data = _acoesRepository.GetAcao(baseAcao.Id);
+            var data = _produtosRepository.GetProduto(baseAcao.Id);
             var transferencia = new Transferencia
             {
-                _BaseAcao = data,
+                BaseProduto = data,
                 Quantidade = 0
             };
             return View(transferencia);
@@ -64,17 +66,17 @@ namespace WebInvest.Controllers
         [Authorize]
         public IActionResult Comprar(Transferencia transferencia)
         {
-            if (transferencia._BaseAcao.ValorAtual < 0)
+            if (transferencia.BaseProduto.ValorAtual < 0)
             {
-                transferencia._BaseAcao.ValorAtual = transferencia._BaseAcao.ValorAtual * -1;
+                transferencia.BaseProduto.ValorAtual = transferencia.BaseProduto.ValorAtual * -1;
             }
             try
             {
-                var valorTotal = transferencia.Quantidade * transferencia._BaseAcao.ValorAtual;
+                var valorTotal = transferencia.Quantidade * transferencia.BaseProduto.ValorAtual;
                 var ordem = Ordem.NovaOrdem(int.Parse(User.Identity.Name),
-                                        transferencia._BaseAcao.Id,
+                                        transferencia.BaseProduto.Id,
                                         transferencia.Quantidade,
-                                        transferencia._BaseAcao.ValorAtual,
+                                        transferencia.BaseProduto.ValorAtual,
                                         valorTotal,
                                         DateTime.UtcNow.AddHours(-3),
                                         "Enviado",
@@ -82,7 +84,7 @@ namespace WebInvest.Controllers
                              );
                 _ordensRepository.PostOrdem(ordem);
                 FuncGameficacao();
-                return RedirectToAction("Index", "Transacao");
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception e)
             {
@@ -96,18 +98,18 @@ namespace WebInvest.Controllers
         public IActionResult Vender(Transferencia transferencia)
         {
             var saldo = _usuariosRepository.GetSaldoUsuario(int.Parse(User.Identity.Name));
-            var valorTotal = transferencia.Quantidade * transferencia._BaseAcao.ValorAtual;
+            var valorTotal = transferencia.Quantidade * transferencia.BaseProduto.ValorAtual;
             try
             {
-                var res = _investimentosRepository.ValidacaoInvestimentoUsuario(transferencia._BaseAcao.Id, int.Parse(User.Identity.Name));
+                var res = _investimentosRepository.ValidacaoInvestimentoUsuario(transferencia.BaseProduto.Id, int.Parse(User.Identity.Name));
                 if (res)
                 {
-                    var quantidadeAtual = _investimentosRepository.GetQuantidadeAcaoUsuario(transferencia._BaseAcao.Id, int.Parse(User.Identity.Name));
+                    var quantidadeAtual = _investimentosRepository.GetQuantidadeAcaoUsuario(transferencia.BaseProduto.Id, int.Parse(User.Identity.Name));
                     if (transferencia.Quantidade <= quantidadeAtual)
                     {
-                        var ordem = Ordem.NovaOrdem(int.Parse(User.Identity.Name), transferencia._BaseAcao.Id, transferencia.Quantidade, transferencia._BaseAcao.ValorAtual, valorTotal, DateTime.UtcNow.AddHours(-3), "Sucesso", false);
+                        var ordem = Ordem.NovaOrdem(int.Parse(User.Identity.Name), transferencia.BaseProduto.Id, transferencia.Quantidade, transferencia.BaseProduto.ValorAtual, valorTotal, DateTime.UtcNow.AddHours(-3), "Sucesso", false);
                         _ordensRepository.PostOrdem(ordem);
-                        _investimentosRepository.PutInvestimentoUsuario(transferencia._BaseAcao.Id, int.Parse(User.Identity.Name), quantidadeAtual - transferencia.Quantidade);
+                        _investimentosRepository.PutInvestimentoUsuario(transferencia.BaseProduto.Id, int.Parse(User.Identity.Name), quantidadeAtual - transferencia.Quantidade);
                         _usuariosRepository.PutSaldoUsuario(int.Parse(User.Identity.Name), saldo + valorTotal);
                         return RedirectToAction("Index", "Transacao");
                     }
@@ -125,7 +127,7 @@ namespace WebInvest.Controllers
 
         private void FuncGameficacao()
         {
-            var infoUsuario = _gameficacaoRepository.GetLevelUsuario(User.Identity.Name);
+            var infoUsuario = _gameficacaoRepository.GetLevelUsuario(long.Parse(User.Identity.Name));
             var expGanha = infoUsuario.ExpAtual + 1;
             _gameficacaoRepository.PutExpAtual(infoUsuario.Id, expGanha);
             if (infoUsuario.ExpProximo <= expGanha)

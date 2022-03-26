@@ -24,6 +24,19 @@ namespace DatabaseLib.Repository
             }
         }
 
+        public Produto GetProduto(long idProduto)
+        {
+            var context = new EntityDb();
+            try
+            {
+                return context.Produtos.Include(c => c.Tipo).Where(p=>p.Id==idProduto).FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public decimal GetValorProduto(long idProduto)
         {
             var context = new EntityDb();

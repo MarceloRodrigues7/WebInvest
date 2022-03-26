@@ -1,4 +1,5 @@
-﻿@model IEnumerable<BaseAcao>
+﻿@using DatabaseLib.Domain
+@model IEnumerable<Produto>
 @{
     ViewData["Title"] = "Ações";
 }
@@ -44,7 +45,7 @@
                         <tr>
                             <td class="text-center">@item.Id</td>
                             <td class="text-center">@item.Sigla</td>
-                            <td>@item.Acao</td>
+                            <td>@item.Nome</td>
                             @if (@item.ValorAtual < 0)
                             {
                                 <td class="text-center" style="color:indianred">R$ @item.ValorAtual</td>

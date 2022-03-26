@@ -25,6 +25,21 @@ namespace DatabaseLib.Repository
             };
         }
 
+        public IEnumerable<HistoricoPreco> GetHistoricoPrecos(long idProduto)
+        {
+            using (var context = new EntityDb())
+            {
+                try
+                {
+                    return context.HistoricoPrecos.Where(h => h.ProdutoId == idProduto);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            };
+        }
+
         public void Post(HistoricoPreco historico)
         {
             using (var context = new EntityDb())

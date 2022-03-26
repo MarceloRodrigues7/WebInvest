@@ -13,16 +13,6 @@ namespace DatabaseLib.Domain
         public decimal Valor { get; set; }
         public DateTime DataHora { get; set; }
 
-        public Produto Produto { get; set; }
-
-        public static HistoricoPreco GeraObj(Produto produto)
-        {
-            return new HistoricoPreco
-            {
-                DataHora = DateTime.UtcNow.AddHours(-3),
-                ProdutoId = produto.Id,
-                Valor = Produto.VariacaoValor(produto),
-            };
-        }
+        public Produto Produto { get; set; }        
     }
 }

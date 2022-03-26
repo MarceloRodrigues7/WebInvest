@@ -8,7 +8,7 @@
         <div class="card-header">
             <h5 class="text-secondary ml-2 mt-1">
                 <i class="fas fa-donate mr-2"></i>
-                Ação: @Model._BaseAcao.Acao
+                Ação: @Model.BaseProduto.Nome
             </h5>
         </div>
         @if (TempData["Message"] != null)
@@ -25,33 +25,33 @@
             <div class="row">
                 <div class="col">
                     <label class="text-break">Cod.</label>
-                    <input type="text" class="form-control" value=@Model._BaseAcao.Id name="Id" disabled>
+                    <input type="text" class="form-control" value=@Model.BaseProduto.Id name="Id" disabled>
                 </div>
                 <div class="col">
                     <label class="text-break">Sigla</label>
-                    <input type="text" class="form-control" value=@Model._BaseAcao.Sigla name="inputSigla" disabled>
+                    <input type="text" class="form-control" value=@Model.BaseProduto.Sigla name="inputSigla" disabled>
                 </div>
                 <div class="col">
                     <label class="text-break">Ação</label>
-                    <input type="text" class="form-control" value=@Model._BaseAcao.Acao name="Acao" disabled>
+                    <input type="text" class="form-control" value=@Model.BaseProduto.Nome name="Acao" disabled>
                 </div>
             </div>
             <p></p>
             <div class="row">
                 <div class="col">
                     <label class="text-break">Data Cadastramento</label>
-                    <input type="text" class="form-control" value=@Model._BaseAcao.DataCriacao name="DataCriacao" disabled>
+                    <input type="text" class="form-control" value=@Model.BaseProduto.DataCriacao name="DataCriacao" disabled>
                 </div>
                 <div class="col">
                     <label class="text-break">Data Atualização</label>
-                    <input type="text" class="form-control" value=@Model._BaseAcao.DataAtualizacao name="DataAtualizacao" disabled>
+                    <input type="text" class="form-control" value=@Model.BaseProduto.DataAtualizacao name="DataAtualizacao" disabled>
                 </div>
             </div>
             <p></p>
             <div class="row">
                 <div class="col">
                     <label class="text-break">Valor Atual</label>
-                    <input type="text" class="form-control" value=@Model._BaseAcao.ValorAtual name="valorAtual" disabled>
+                    <input type="text" class="form-control" value=@Model.BaseProduto.ValorAtual name="valorAtual" disabled>
                 </div>
                 <div class="col">
                     <label class="text-break">Quantidade</label>
@@ -80,7 +80,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Venda: @Model._BaseAcao.Acao</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Venda: @Model.BaseProduto.Nome</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -89,17 +89,17 @@
                     <div class="row">
                         <div class="col">
                             <label class="text-break">Cod.</label>
-                            @Html.TextBoxFor(model => model._BaseAcao.Id, new { @type = "text", @class = "form-control", @id = "txtId", @required = true, @readonly = true })
+                            @Html.TextBoxFor(model => model.BaseProduto.Id, new { @type = "text", @class = "form-control", @id = "txtId", @required = true, @readonly = true })
                         </div>
                         <div class="col">
                             <label class="text-break">Ação</label>
-                            @Html.TextBoxFor(model => model._BaseAcao.Sigla, new { @type = "text", @class = "form-control", @id = "txtSigla", @required = true, @readonly = true })
+                            @Html.TextBoxFor(model => model.BaseProduto.Sigla, new { @type = "text", @class = "form-control", @id = "txtSigla", @required = true, @readonly = true })
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
                             <label class="text-break">Valor Atual</label>
-                            @Html.TextBoxFor(model => model._BaseAcao.ValorAtual, new { @type = "text", @class = "form-control", @id = "txtValorAtual", @required = true, @readonly = true })
+                            @Html.TextBoxFor(model => model.BaseProduto.ValorAtual, new { @type = "text", @class = "form-control", @id = "txtValorAtual", @required = true, @readonly = true })
                         </div>
                         <div class="col">
                             <label class="text-break">Qtde.</label>
@@ -127,7 +127,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Compra: @Model._BaseAcao.Acao</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Compra: @Model.BaseProduto.Nome</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -136,17 +136,17 @@
                     <div class="row">
                         <div class="col">
                             <label class="text-break">Cod.</label>
-                            @Html.TextBoxFor(model => model._BaseAcao.Id, new { @type = "text", @class = "form-control", @id = "txtId", @required = true, @readonly = true })
+                            @Html.TextBoxFor(model => model.BaseProduto.Id, new { @type = "text", @class = "form-control", @id = "txtId", @required = true, @readonly = true })
                         </div>
                         <div class="col">
                             <label class="text-break">Ação</label>
-                            @Html.TextBoxFor(model => model._BaseAcao.Sigla, new { @type = "text", @class = "form-control", @id = "txtSigla", @required = true, @readonly = true })
+                            @Html.TextBoxFor(model => model.BaseProduto.Sigla, new { @type = "text", @class = "form-control", @id = "txtSigla", @required = true, @readonly = true })
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
                             <label class="text-break">Valor Atual</label>
-                            @Html.TextBoxFor(model => model._BaseAcao.ValorAtual, new { @type = "text", @class = "form-control", @id = "txtValorAtual", @required = true, @readonly = true })
+                            @Html.TextBoxFor(model => model.BaseProduto.ValorAtual, new { @type = "text", @class = "form-control", @id = "txtValorAtual", @required = true, @readonly = true })
                         </div>
                         <div class="col">
                             <label class="text-break">Qtde.</label>
